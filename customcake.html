@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Custom Cakes – The Chef's Cakes & Bakes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brown:      #4A2C14;
+      --cream-bg:   #F8F4F1;
+      --gold:       #F7C873;
+      --caramel:    #D8A25E;
+      --dark-text:  #2E1B0F;
+      --card-bg:    #FFF8F2;
+      --shadow:     0 4px 20px rgba(74,44,20,0.10);
+      --radius:     14px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Lato', sans-serif; background: var(--cream-bg); color: var(--dark-text); min-height: 100vh; }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      position: sticky; top: 0; z-index: 1000;
+      background: var(--brown);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    }
+    .nav-brand {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold);
+      font-size: 1.35rem;
+      font-weight: 700;
+      text-decoration: none;
+      padding: 16px 0;
+      white-space: nowrap;
+      letter-spacing: 0.5px;
+    }
+    .nav-links {
+      display: flex; gap: 6px; align-items: center;
+      list-style: none;
+    }
+    .nav-links a {
+      color: #f0e6d6;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 20px;
+      transition: background 0.2s, color 0.2s;
+      letter-spacing: 0.3px;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      background: var(--gold);
+      color: var(--brown);
+    }
+    .hamburger {
+      display: none;
+      flex-direction: column; gap: 5px; cursor: pointer;
+      padding: 10px 0;
+    }
+    .hamburger span {
+      display: block; width: 26px; height: 2.5px;
+      background: var(--gold); border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      background: var(--brown);
+      padding: 10px 5% 18px;
+      gap: 4px;
+    }
+    .mobile-menu a {
+      color: #f0e6d6; text-decoration: none;
+      font-size: 1rem; font-weight: 600;
+      padding: 11px 16px; border-radius: 10px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .mobile-menu a:hover, .mobile-menu a.active {
+      background: var(--gold); color: var(--brown);
+    }
+    .mobile-menu.show { display: flex; }
+
+    /* ─── PAGE HEADER ─── */
+    .page-header {
+      background: linear-gradient(135deg, var(--brown) 0%, #6b3e1e 60%, #8a5030 100%);
+      text-align: center;
+      padding: 64px 5% 56px;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f7c873' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .page-header h1 {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      margin-bottom: 14px;
+      position: relative;
+    }
+    .page-header p {
+      color: #f0e6d6;
+      font-size: clamp(0.97rem, 2.5vw, 1.15rem);
+      max-width: 580px;
+      margin: 0 auto;
+      line-height: 1.7;
+      position: relative;
+    }
+    .header-divider {
+      width: 60px; height: 3px;
+      background: var(--gold);
+      margin: 18px auto 22px;
+      border-radius: 2px;
+      position: relative;
+    }
+
+    /* ─── SECTION TITLES ─── */
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+      color: var(--brown);
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .section-sub {
+      text-align: center;
+      color: #7a5030;
+      margin-bottom: 34px;
+      font-size: 0.97rem;
+    }
+    .title-line {
+      width: 50px; height: 3px;
+      background: var(--gold);
+      margin: 10px auto 28px;
+      border-radius: 2px;
+    }
+
+    /* ─── WRAPPER ─── */
+    .wrapper { max-width: 1140px; margin: 0 auto; padding: 0 5%; }
+
+    /* ─── INSPIRATION SECTION ─── */
+    .inspiration { padding: 62px 0 48px; }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .gallery-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+      border: 1.5px solid #ecddd0;
+    }
+    .gallery-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 32px rgba(74,44,20,0.16);
+    }
+    .gallery-card img {
+      width: 100%; aspect-ratio: 3/4;
+      object-fit: cover; display: block;
+    }
+    .gallery-card .img-placeholder {
+      width: 100%; aspect-ratio: 3/4;
+      background: linear-gradient(145deg, #f0e0cc 0%, #e8d0b8 100%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 10px;
+    }
+    .gallery-card .img-placeholder svg { opacity: 0.4; }
+    .gallery-card .img-placeholder span {
+      font-size: 0.82rem; color: #9a6b44;
+      font-weight: 600; letter-spacing: 0.5px;
+    }
+    .gallery-card .card-label {
+      padding: 13px 14px 14px;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.97rem;
+      color: var(--brown);
+      font-weight: 700;
+      text-align: center;
+      border-top: 1px solid #ecddd0;
+    }
+
+    /* ─── ORDER FORM SECTION ─── */
+    .order-section { padding: 10px 0 70px; }
+    .form-card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      box-shadow: 0 6px 36px rgba(74,44,20,0.13);
+      border: 1.5px solid #ecddd0;
+      overflow: hidden;
+    }
+    .form-card-header {
+      background: var(--brown);
+      padding: 26px 36px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .form-card-header svg { flex-shrink: 0; }
+    .form-card-header h2 {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold);
+      font-size: 1.45rem;
+    }
+    .form-card-header p { color: #f0e0cc; font-size: 0.88rem; margin-top: 2px; }
+    .form-body { padding: 36px; }
+
+    /* form sections */
+    .form-section {
+      margin-bottom: 36px;
+      padding-bottom: 30px;
+      border-bottom: 1.5px dashed #e5d0bc;
+    }
+    .form-section:last-of-type { border-bottom: none; margin-bottom: 0; }
+    .form-section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem; color: var(--brown);
+      margin-bottom: 20px;
+      display: flex; align-items: center; gap: 9px;
+    }
+    .form-section-title::after {
+      content: ''; flex: 1; height: 1.5px;
+      background: linear-gradient(to right, #d4a97a, transparent);
+      border-radius: 1px;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .form-grid.single { grid-template-columns: 1fr; }
+    .form-group { display: flex; flex-direction: column; gap: 7px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label {
+      font-size: 0.875rem; font-weight: 700;
+      color: var(--brown); letter-spacing: 0.2px;
+    }
+    label span.req { color: var(--caramel); margin-left: 2px; }
+    input[type="text"], input[type="tel"], input[type="date"],
+    input[type="file"], select, textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1.5px solid #dcc9b5;
+      border-radius: 10px;
+      background: #fffaf5;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.93rem;
+      color: var(--dark-text);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--caramel);
+      box-shadow: 0 0 0 3px rgba(247,200,115,0.18);
+      background: #fff;
+    }
+    textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+    input[type="file"] {
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+    input[type="file"]::file-selector-button {
+      background: var(--gold);
+      border: none;
+      border-radius: 7px;
+      padding: 6px 14px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--brown);
+      cursor: pointer;
+      margin-right: 10px;
+      transition: background 0.2s;
+    }
+    input[type="file"]::file-selector-button:hover { background: var(--caramel); }
+
+    /* radio / checkbox */
+    .radio-group {
+      display: flex; flex-wrap: wrap; gap: 12px;
+      margin-top: 4px;
+    }
+    .radio-option {
+      display: flex; align-items: center; gap: 8px;
+      cursor: pointer;
+    }
+    .radio-option input[type="radio"] {
+      width: auto; padding: 0;
+      accent-color: var(--caramel);
+      width: 17px; height: 17px;
+      cursor: pointer;
+    }
+    .radio-option span {
+      font-size: 0.9rem; font-weight: 600;
+      color: var(--dark-text);
+    }
+
+    /* delivery address */
+    #delivery-address-group { display: none; }
+    #delivery-address-group.visible { display: flex; flex-direction: column; gap: 7px; margin-top: 14px; }
+
+    /* hint text */
+    .hint {
+      font-size: 0.78rem;
+      color: #9a7050;
+      margin-top: 3px;
+    }
+
+    /* ─── SUBMIT BUTTON ─── */
+    .btn-submit {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%;
+      padding: 17px 28px;
+      background: var(--gold);
+      color: var(--brown);
+      border: none;
+      border-radius: 12px;
+      font-family: 'Lato', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      letter-spacing: 0.4px;
+      margin-top: 30px;
+      box-shadow: 0 4px 16px rgba(247,200,115,0.35);
+      transition: background 0.22s, transform 0.15s, box-shadow 0.22s;
+    }
+    .btn-submit:hover {
+      background: var(--caramel);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(216,162,94,0.38);
+    }
+    .btn-submit:active { transform: translateY(0); }
+
+    /* ─── IMPORTANT INFO ─── */
+ .info-section {
+  padding: 0 0 72px;
+}
+
+.info-card {
+  background: linear-gradient(135deg, #fff4e6 0%, #fff8f2 100%);
+  border: 2px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 28px 28px;
+  box-shadow: var(--shadow);
+  max-width: 800px;
+  margin: auto;
+}
+
+.info-card h3 {
+  font-family: 'Playfair Display', serif;
+  color: var(--brown);
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.info-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.info-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.95rem;
+  color: var(--dark-text);
+  line-height: 1.6;
+  word-break: normal;
+}
+
+.info-list li::before {
+  content: "✦";
+  color: var(--caramel);
+  font-size: 0.75rem;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+    /* ─── TOAST ─── */
+    .toast {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: var(--brown); color: #fff;
+      padding: 13px 26px; border-radius: 30px;
+      font-size: 0.9rem; font-weight: 600;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+      transition: transform 0.4s cubic-bezier(.34,1.56,.64,1);
+      z-index: 9999; white-space: nowrap;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--brown);
+      text-align: center;
+      padding: 38px 5% 28px;
+      color: #f0e6d6;
+    }
+    .footer-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--gold);
+      margin-bottom: 8px;
+      font-style: italic;
+    }
+    .footer-tagline {
+      font-size: 0.9rem; margin-bottom: 18px; color: #d4bfa8;
+    }
+    .footer-divider {
+      width: 50px; height: 2px;
+      background: var(--gold); opacity: 0.4;
+      margin: 0 auto 16px;
+    }
+    .footer-copy { font-size: 0.83rem; color: #c0a080; margin-bottom: 8px; }
+    .footer-credit { font-size: 0.82rem; color: #c0a080; }
+    .footer-credit a {
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 700;
+      letter-spacing: 1px;
+      transition: opacity 0.2s;
+    }
+    .footer-credit a:hover { opacity: 0.75; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-grid .form-group.full { grid-column: 1; }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .form-body { padding: 22px 18px; }
+      .form-card-header { padding: 20px 20px; }
+      .info-card { padding: 22px 18px; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .btn-submit { font-size: 0.97rem; padding: 15px 18px; }
+    }
+    @media (max-width: 400px) {
+      .gallery-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAVBAR ─── -->
+<nav>
+  <a class="nav-brand" href="index.html">🎂 The Chef's Cakes &amp; Bakes</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="menu.html">Menu</a></li>
+    <li><a href="custom-cakes.html" class="active">Custom Cakes</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="cart.html">🛒 Cart</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" aria-label="Toggle menu" role="button" tabindex="0">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="menu.html">Menu</a>
+  <a href="custom-cakes.html" class="active">Custom Cakes</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="contact.html">Contact</a>
+  <a href="cart.html">🛒 Cart</a>
+</div>
+
+<!-- ─── PAGE HEADER ─── -->
+<div class="page-header">
+  <h1>Custom Cake Orders</h1>
+  <div class="header-divider"></div>
+  <p>Design your perfect cake for birthdays, anniversaries, and special celebrations.</p>
+</div>
+
+<!-- ─── INSPIRATION SECTION ─── -->
+<section class="inspiration">
+  <div class="wrapper">
+    <h2 class="section-title">Custom Cake Ideas</h2>
+    <div class="title-line"></div>
+    <p class="section-sub">Browse our creations for inspiration — then design your dream cake below.</p>
+    
+    <div class="gallery-grid">
+      
+      <!-- Card 1 -->
+      <div class="gallery-card">
+        <img src="26.png" alt="Birthday Delight Cake">
+        <div class="card-label">Birthday Delight</div>
+      </div>
+      
+      <!-- Card 2 -->
+      <div class="gallery-card">
+        <img src="27.png" alt="Wedding Elegance Cake">
+        <div class="card-label">Wedding Elegance</div>
+      </div>
+      
+      <!-- Card 3 -->
+      <div class="gallery-card">
+        <img src="28.png" alt="Anniversary Special Cake">
+        <div class="card-label">Anniversary Special</div>
+      </div>
+      
+      <!-- Card 4 -->
+      <div class="gallery-card">
+        <img src="29.png" alt="Theme Fantasy Cake">
+        <div class="card-label">Theme Fantasy</div>
+      </div>
+      
+    </div>
+  </div>
+</section>
+<!-- ─── ORDER FORM SECTION ─── -->
+<section class="order-section">
+  <div class="wrapper">
+    <h2 class="section-title">Place Your Custom Order</h2>
+    <div class="title-line"></div>
+    <div class="form-card">
+      <div class="form-card-header">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#F7C873" stroke-width="1.8">
+          <path d="M12 2a5 5 0 0 1 5 5v2H7V7a5 5 0 0 1 5-5z"/>
+          <path d="M3 9h18l-1.5 12H4.5L3 9z"/>
+          <path d="M9 9v3m6-3v3"/>
+        </svg>
+        <div>
+          <h2>Custom Cake Request Form</h2>
+          <p>Fill in the details below — we'll get back to you on WhatsApp!</p>
+        </div>
+      </div>
+      <div class="form-body">
+
+        <!-- CUSTOMER DETAILS -->
+        <div class="form-section">
+          <div class="form-section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            Customer Details
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="cname">Customer Name <span class="req">*</span></label>
+              <input type="text" id="cname" placeholder="Your full name" required />
+            </div>
+            <div class="form-group">
+              <label for="cphone">Phone Number <span class="req">*</span></label>
+              <input type="tel" id="cphone" placeholder="+91 XXXXX XXXXX" required />
+            </div>
+          </div>
+        </div>
+
+        <!-- EVENT DETAILS -->
+        <div class="form-section">
+          <div class="form-section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            Event Details
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="event-type">Event Type <span class="req">*</span></label>
+              <select id="event-type" required>
+                <option value="" disabled selected>Select event…</option>
+                <option>Birthday</option>
+                <option>Anniversary</option>
+                <option>Wedding</option>
+                <option>Engagement</option>
+                <option>Baby Shower</option>
+                <option>Graduation</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="event-date">Event Date <span class="req">*</span></label>
+              <input type="date" id="event-date" required />
+            </div>
+          </div>
+        </div>
+
+        <!-- CAKE DETAILS -->
+        <div class="form-section">
+          <div class="form-section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 0 1 5 5v2H7V7a5 5 0 0 1 5-5z"/><path d="M3 9h18l-1.5 12H4.5L3 9z"/></svg>
+            Cake Details
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="flavour">Cake Flavour <span class="req">*</span></label>
+              <select id="flavour" required>
+                <option value="" disabled selected>Select flavour…</option>
+                <option>Butterscotch</option>
+                <option>Pineapple</option>
+                <option>Black Forest</option>
+                <option>Chocolate Truffle</option>
+                <option>Red Velvet</option>
+                <option>Ferrero Rocher</option>
+                <option>Kit Kat</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="weight">Cake Weight <span class="req">*</span></label>
+              <select id="weight" required>
+                <option value="" disabled selected>Select weight…</option>
+                <option>1 kg</option>
+                <option>1.5 kg</option>
+                <option>2 kg</option>
+                <option>3 kg</option>
+                <option>Custom weight</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label>Cake Type <span class="req">*</span></label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input type="radio" name="cake-type" value="Egg Cake" required />
+                  <span>🥚 Egg Cake</span>
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="cake-type" value="Eggless Cake" />
+                  <span>🌱 Eggless Cake</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CAKE CUSTOMIZATION -->
+        <div class="form-section">
+          <div class="form-section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+            Cake Customization
+          </div>
+          <div class="form-grid single">
+            <div class="form-group">
+              <label for="cake-msg">Message on Cake</label>
+              <input type="text" id="cake-msg" placeholder="e.g. Happy Birthday Riya 🎉" maxlength="80" />
+              <span class="hint">Up to 80 characters</span>
+            </div>
+            <div class="form-group">
+              <label for="cake-desc">Describe Your Cake Design</label>
+              <textarea id="cake-desc" placeholder="e.g. Pink theme cake with butterflies and gold decorations." rows="4"></textarea>
+            </div>
+           
+          </div>
+        </div>
+
+        <!-- DELIVERY -->
+        <div class="form-section">
+          <div class="form-section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"/><rect x="9" y="11" width="14" height="10" rx="1"/><circle cx="12" cy="21" r="1"/><circle cx="20" cy="21" r="1"/></svg>
+            Delivery Details
+          </div>
+          <div class="form-grid single">
+            <div class="form-group">
+              <label>Delivery Option <span class="req">*</span></label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input type="radio" name="delivery" value="Pickup from bakery" id="pickup" required />
+                  <span>🏪 Pickup from Bakery</span>
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="delivery" value="Home Delivery (₹100)" id="home-del" />
+                  <span>🛵 Home Delivery (₹100)</span>
+                </label>
+              </div>
+            </div>
+            <div class="form-group" id="delivery-address-group">
+              <label for="del-address">Delivery Address <span class="req">*</span></label>
+              <textarea id="del-address" placeholder="Enter your full delivery address…" rows="3"></textarea>
+              <span class="hint">Delivery available within Ejipura area only</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBMIT -->
+        <button class="btn-submit" id="submitBtn" type="button">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.025.507 3.934 1.395 5.608L0 24l6.572-1.395A11.935 11.935 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 0 1-5.006-1.373l-.36-.214-3.727.979.996-3.638-.235-.374A9.818 9.818 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182c5.43 0 9.818 4.388 9.818 9.818 0 5.43-4.388 9.818-9.818 9.818z"/></svg>
+          Send Custom Cake Request on WhatsApp
+        </button>
+
+      </div><!-- /form-body -->
+    </div><!-- /form-card -->
+  </div>
+</section>
+
+<!-- ─── IMPORTANT INFO ─── -->
+<section class="info-section">
+  <div class="wrapper">
+
+    <div class="info-card">
+
+      <h3 class="info-title">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4A2C14" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 8v4"></path>
+          <circle cx="12" cy="16" r="1"></circle>
+        </svg>
+        Important Information
+      </h3>
+
+      <ul class="info-list">
+
+        <li>
+          Custom cakes require minimum 1 day advance order — please plan accordingly.
+        </li>
+
+        <li>
+          Photo cake print is charged extra at ₹200 per print.
+        </li>
+
+        <li>
+          Home delivery charge is ₹100 flat within the serving area.
+        </li>
+
+        <li>
+          We currently deliver within Ejipura, Bangalore only. Pickup is always available.
+        </li>
+
+        <li>
+          Our team will confirm your order via WhatsApp after reviewing the request.
+        </li>
+
+      </ul>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-brand">The Chef's Cakes &amp; Bakes</div>
+  <div class="footer-tagline">Serving Fresh Cakes in Ejipura, Bangalore</div>
+  <div class="footer-divider"></div>
+  <p class="footer-copy">© 2026 The Chef's Cakes &amp; Bakes. All Rights Reserved.</p>
+  <p class="footer-credit">Designed by <a href="https://www.instagram.com/echox_com/" target="_blank" rel="noopener">ECHOX</a></p>
+</footer>
+
+<!-- ─── TOAST ─── -->
+<div class="toast" id="toast"></div>
+
+<script>
+  /* ── Mobile Nav ── */
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('show');
+  });
+  hamburger.addEventListener('keydown', e => { if (e.key === 'Enter') hamburger.click(); });
+
+  /* ── Delivery Address Toggle ── */
+  const deliveryRadios = document.querySelectorAll('input[name="delivery"]');
+  const addrGroup = document.getElementById('delivery-address-group');
+  const addrInput = document.getElementById('del-address');
+  deliveryRadios.forEach(r => {
+    r.addEventListener('change', () => {
+      const isDelivery = document.getElementById('home-del').checked;
+      addrGroup.classList.toggle('visible', isDelivery);
+      addrInput.required = isDelivery;
+    });
+  });
+
+  /* ── Toast ── */
+  function showToast(msg, duration = 3200) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), duration);
+  }
+
+  /* ── WhatsApp Submit ── */
+  document.getElementById('submitBtn').addEventListener('click', () => {
+    // Collect values
+    const name      = document.getElementById('cname').value.trim();
+    const phone     = document.getElementById('cphone').value.trim();
+    const eventType = document.getElementById('event-type').value;
+    const eventDate = document.getElementById('event-date').value;
+    const flavour   = document.getElementById('flavour').value;
+    const weight    = document.getElementById('weight').value;
+    const cakeType  = (() => {
+      const r = document.querySelector('input[name="cake-type"]:checked');
+      return r ? r.value : '';
+    })();
+    const cakeMsg   = document.getElementById('cake-msg').value.trim();
+    const cakeDesc  = document.getElementById('cake-desc').value.trim();
+    const delivery  = (() => {
+      const r = document.querySelector('input[name="delivery"]:checked');
+      return r ? r.value : '';
+    })();
+    const delAddr   = document.getElementById('del-address').value.trim();
+
+    /* Validation */
+    if (!name)       { showToast('⚠️ Please enter your name.'); return; }
+    if (!phone)      { showToast('⚠️ Please enter your phone number.'); return; }
+    if (!eventType)  { showToast('⚠️ Please select an event type.'); return; }
+    if (!eventDate)  { showToast('⚠️ Please choose the event date.'); return; }
+    if (!flavour)    { showToast('⚠️ Please select a cake flavour.'); return; }
+    if (!weight)     { showToast('⚠️ Please select a cake weight.'); return; }
+    if (!cakeType)   { showToast('⚠️ Please choose Egg or Eggless cake.'); return; }
+    if (!delivery)   { showToast('⚠️ Please choose a delivery option.'); return; }
+    if (delivery === 'Home Delivery (₹100)' && !delAddr) {
+      showToast('⚠️ Please enter your delivery address.'); return;
+    }
+
+    /* Format date nicely */
+    const dateFormatted = eventDate
+      ? new Date(eventDate).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' })
+      : '';
+
+    /* Build message */
+    let msg = `Hello   Chef's Cakes & Bakes 🎂\n\n`;
+    msg += `✨ *Custom Cake Request* ✨\n`;
+    msg += `━━━━━━━━━━━━━━━━━━━\n\n`;
+    msg += `👤 *Name:* ${name}\n`;
+    msg += `📞 *Phone:* ${phone}\n\n`;
+    msg += `🎉 *Event:* ${eventType}\n`;
+    msg += `📅 *Event Date:* ${dateFormatted}\n\n`;
+    msg += `🍰 *Cake Flavour:* ${flavour}\n`;
+    msg += `⚖️ *Weight:* ${weight}\n`;
+    msg += `🥚 *Cake Type:* ${cakeType}\n\n`;
+    if (cakeMsg)  msg += `💬 *Message on Cake:* ${cakeMsg}\n\n`;
+    if (cakeDesc) msg += `🎨 *Design Description:*\n${cakeDesc}\n\n`;
+    msg += `🚗 *Delivery:* ${delivery}\n`;
+    if (delAddr)  msg += `📍 *Delivery Address:* ${delAddr}\n`;
+    msg += `\n━━━━━━━━━━━━━━━━━━━\nThank you! 🙏`;
+
+    const waURL = `https://wa.me/919901035778?text=${encodeURIComponent(msg)}`;
+    window.open(waURL, '_blank');
+    showToast('✅ Opening WhatsApp… see you there!', 3500);
+  });
+
+  /* ── Set min date for event date ── */
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  document.getElementById('event-date').min = tomorrow.toISOString().split('T')[0];
+</script>
+</body>
+</html>

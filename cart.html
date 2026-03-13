@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Cart – The Chef's Cakes & Bakes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brown:     #4A2C14;
+      --cream-bg:  #F8F4F1;
+      --gold:      #F7C873;
+      --caramel:   #D8A25E;
+      --dark-text: #2E1B0F;
+      --card-bg:   #FFF8F2;
+      --shadow:    0 4px 20px rgba(74,44,20,0.10);
+      --radius:    14px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Lato', sans-serif; background: var(--cream-bg); color: var(--dark-text); min-height: 100vh; }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: sticky; top: 0; z-index: 1000;
+      background: var(--brown);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.20);
+    }
+    .nav-brand { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.35rem; font-weight: 700; text-decoration: none; padding: 16px 0; white-space: nowrap; letter-spacing: 0.5px; }
+    .nav-links { display: flex; gap: 4px; align-items: center; list-style: none; }
+    .nav-links a { color: #f0e6d6; text-decoration: none; font-size: 0.88rem; font-weight: 600; padding: 8px 12px; border-radius: 20px; transition: background 0.2s, color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { background: var(--gold); color: var(--brown); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px 0; }
+    .hamburger span { display: block; width: 26px; height: 2.5px; background: var(--gold); border-radius: 2px; transition: all 0.3s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+    .mobile-menu { display: none; flex-direction: column; background: var(--brown); padding: 10px 5% 18px; gap: 4px; }
+    .mobile-menu a { color: #f0e6d6; text-decoration: none; font-size: 1rem; font-weight: 600; padding: 11px 16px; border-radius: 10px; transition: background 0.2s, color 0.2s; }
+    .mobile-menu a:hover, .mobile-menu a.active { background: var(--gold); color: var(--brown); }
+    .mobile-menu.show { display: flex; }
+
+    /* ── PAGE HEADER ── */
+    .page-header { background: linear-gradient(135deg, var(--brown) 0%, #6b3e1e 55%, #8a5030 100%); text-align: center; padding: 62px 5% 54px; position: relative; overflow: hidden; }
+    .page-header::before { content: ''; position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f7c873' fill-opacity='0.055'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); pointer-events: none; }
+    .header-inner { position: relative; z-index: 1; }
+    .header-eyebrow { display: inline-block; font-size: 0.76rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); background: rgba(247,200,115,0.12); border: 1px solid rgba(247,200,115,0.28); padding: 5px 16px; border-radius: 20px; margin-bottom: 18px; }
+    .page-header h1 { font-family: 'Playfair Display', serif; color: #fff; font-size: clamp(2rem, 5vw, 3.1rem); margin-bottom: 14px; }
+    .page-header h1 em { color: var(--gold); font-style: italic; }
+    .header-divider { width: 52px; height: 3px; background: var(--gold); margin: 0 auto 18px; border-radius: 2px; }
+    .page-header p { color: #e8d8c6; font-size: clamp(0.95rem, 2.2vw, 1.1rem); max-width: 480px; margin: 0 auto; line-height: 1.75; }
+
+    /* ── WRAPPER ── */
+    .wrapper { max-width: 1100px; margin: 0 auto; padding: 0 5%; }
+    .cart-page { padding: 48px 0 72px; }
+
+    /* ── TWO-COLUMN LAYOUT ── */
+    .cart-layout { display: grid; grid-template-columns: 1fr 370px; gap: 28px; align-items: start; }
+    .left-col  { display: flex; flex-direction: column; gap: 22px; }
+    .right-col { display: flex; flex-direction: column; gap: 20px; }
+
+    /* ── CARD SHELL ── */
+    .card { background: var(--card-bg); border: 1.5px solid #ecddd0; border-radius: 18px; box-shadow: var(--shadow); overflow: hidden; }
+    .card-header { background: var(--brown); padding: 17px 24px; display: flex; align-items: center; gap: 11px; }
+    .card-header h2 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.12rem; flex: 1; }
+    .item-badge { background: var(--gold); color: var(--brown); font-size: 0.74rem; font-weight: 900; padding: 3px 10px; border-radius: 12px; }
+    .card-body { padding: 24px; }
+
+    /* ── EMPTY STATE ── */
+    .empty-state { text-align: center; padding: 54px 24px; }
+    .empty-emoji { font-size: 3.8rem; display: block; margin-bottom: 16px; opacity: 0.5; }
+    .empty-state h3 { font-family: 'Playfair Display', serif; color: var(--brown); font-size: 1.45rem; margin-bottom: 10px; }
+    .empty-state p { color: #9a6b44; font-size: 0.95rem; margin-bottom: 26px; line-height: 1.6; }
+    .btn-browse { display: inline-flex; align-items: center; gap: 8px; background: var(--gold); color: var(--brown); text-decoration: none; font-weight: 900; font-size: 0.95rem; padding: 13px 28px; border-radius: 50px; box-shadow: 0 4px 16px rgba(247,200,115,0.32); transition: background 0.22s, transform 0.18s; }
+    .btn-browse:hover { background: var(--caramel); transform: translateY(-2px); }
+
+    /* ── CART ITEMS ── */
+    .cart-items-list { display: flex; flex-direction: column; gap: 14px; }
+    .cart-item { display: flex; align-items: flex-start; gap: 14px; background: #fff; border: 1.5px solid #ecddd0; border-radius: 12px; padding: 16px; position: relative; transition: box-shadow 0.2s; }
+    .cart-item:hover { box-shadow: 0 4px 16px rgba(74,44,20,0.10); }
+    .item-icon { width: 52px; height: 52px; flex-shrink: 0; background: linear-gradient(135deg, var(--brown), #6b3e1e); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.55rem; }
+    .item-info { flex: 1; min-width: 0; }
+    .item-name { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--brown); font-weight: 700; margin-bottom: 7px; }
+    .item-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+    .tag { display: inline-block; font-size: 0.72rem; font-weight: 700; padding: 3px 9px; border-radius: 10px; }
+    .tag-weight { background: rgba(247,200,115,0.28); color: var(--brown); }
+    .tag-type   { background: rgba(74,44,20,0.08); color: var(--brown); }
+    .item-price-row { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; }
+    .item-unit-price { font-size: 0.8rem; color: #9a7050; }
+    .item-line-total { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--brown); }
+    .qty-controls { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+    .qty-btn { width: 30px; height: 30px; border-radius: 8px; border: 1.5px solid #dcc9b5; background: var(--cream-bg); color: var(--brown); font-size: 1.1rem; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.18s, border-color 0.18s; }
+    .qty-btn:hover { background: var(--gold); border-color: var(--gold); }
+    .qty-num { font-size: 0.92rem; font-weight: 800; color: var(--dark-text); min-width: 22px; text-align: center; }
+    .btn-remove { position: absolute; top: 13px; right: 13px; background: none; border: 1.5px solid #e0c8b4; border-radius: 8px; cursor: pointer; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; color: #b06040; transition: background 0.18s, border-color 0.18s, color 0.18s; }
+    .btn-remove:hover { background: #fde8e0; border-color: #b06040; color: #8a3020; }
+    .btn-remove svg { width: 14px; height: 14px; }
+
+    /* ── DELIVERY OPTIONS ── */
+    .delivery-opts { display: flex; flex-direction: column; gap: 10px; }
+    .delivery-opt { display: flex; align-items: center; gap: 12px; background: #fff; border: 1.5px solid #dcc9b5; border-radius: 10px; padding: 14px 16px; cursor: pointer; transition: border-color 0.2s, background 0.2s; }
+    .delivery-opt.selected { border-color: var(--gold); background: rgba(247,200,115,0.10); }
+    .delivery-opt input[type="radio"] { accent-color: var(--caramel); width: 17px; height: 17px; cursor: pointer; flex-shrink: 0; }
+    .opt-info { flex: 1; }
+    .opt-info strong { display: block; font-size: 0.91rem; font-weight: 800; color: var(--brown); }
+    .opt-info span   { font-size: 0.78rem; color: #9a6b44; }
+    .opt-price { font-size: 0.86rem; font-weight: 800; color: var(--brown); background: rgba(247,200,115,0.22); padding: 3px 10px; border-radius: 10px; }
+    .addr-box { display: none; margin-top: 14px; }
+    .addr-box.show { display: block; }
+    .addr-box label { font-size: 0.8rem; font-weight: 700; color: var(--brown); margin-bottom: 6px; display: block; }
+    .addr-box textarea { width: 100%; padding: 11px 13px; border: 1.5px solid #dcc9b5; border-radius: 10px; background: #fffaf5; font-family: 'Lato', sans-serif; font-size: 0.9rem; color: var(--dark-text); resize: vertical; min-height: 78px; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    .addr-box textarea:focus { border-color: var(--caramel); box-shadow: 0 0 0 3px rgba(247,200,115,0.18); }
+
+    /* ── ORDER SUMMARY ── */
+    .summary-rows { display: flex; flex-direction: column; gap: 11px; }
+    .s-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.91rem; }
+    .s-row .lbl { color: #7a5030; font-weight: 600; }
+    .s-row .val { color: var(--brown); font-weight: 800; }
+    .s-row.grand { margin-top: 10px; padding-top: 14px; border-top: 2px dashed #e0cbb5; }
+    .s-row.grand .lbl { font-size: 1rem; font-weight: 700; color: var(--brown); }
+    .s-row.grand .val { font-size: 1.22rem; color: var(--caramel); font-weight: 900; }
+
+    /* ── CUSTOMER FORM ── */
+    .form-fields { display: flex; flex-direction: column; gap: 14px; }
+    .fg { display: flex; flex-direction: column; gap: 6px; }
+    .fg label { font-size: 0.8rem; font-weight: 700; color: var(--brown); }
+    .fg label .req { color: var(--caramel); margin-left: 2px; }
+    .fg input { padding: 11px 13px; border: 1.5px solid #dcc9b5; border-radius: 10px; background: #fffaf5; font-family: 'Lato', sans-serif; font-size: 0.9rem; color: var(--dark-text); outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    .fg input:focus { border-color: var(--caramel); box-shadow: 0 0 0 3px rgba(247,200,115,0.18); background: #fff; }
+    .fg .hint { font-size: 0.74rem; color: #9a7050; }
+
+    /* ── SERVICE NOTE ── */
+    .service-note { background: linear-gradient(135deg, #fff4e6, #fff8f2); border: 2px solid var(--gold); border-radius: 14px; padding: 18px 20px; display: flex; align-items: flex-start; gap: 12px; }
+    .service-note svg { flex-shrink: 0; margin-top: 2px; }
+    .service-note p { font-size: 0.84rem; color: #7a5030; line-height: 1.65; }
+    .service-note p strong { color: var(--brown); }
+
+    /* ── PLACE ORDER BUTTON ── */
+    .btn-order { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 17px 22px; background: var(--gold); color: var(--brown); border: none; border-radius: 12px; font-family: 'Lato', sans-serif; font-size: 1rem; font-weight: 900; cursor: pointer; letter-spacing: 0.3px; box-shadow: 0 4px 18px rgba(247,200,115,0.38); transition: background 0.22s, transform 0.15s, box-shadow 0.22s; }
+    .btn-order:hover { background: var(--caramel); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(216,162,94,0.40); }
+    .btn-order:active { transform: translateY(0); }
+    .btn-order svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+    /* ── TOAST ── */
+    .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--brown); color: #fff; padding: 13px 26px; border-radius: 30px; font-size: 0.9rem; font-weight: 700; box-shadow: 0 6px 24px rgba(0,0,0,0.2); transition: transform 0.4s cubic-bezier(.34,1.56,.64,1); z-index: 9999; white-space: nowrap; pointer-events: none; }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── FOOTER ── */
+    footer { background: var(--brown); text-align: center; padding: 40px 5% 28px; color: #f0e6d6; }
+    .footer-brand { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--gold); margin-bottom: 8px; font-style: italic; }
+    .footer-tagline { font-size: 0.9rem; margin-bottom: 18px; color: #d4bfa8; }
+    .footer-divider { width: 50px; height: 2px; background: var(--gold); opacity: 0.4; margin: 0 auto 16px; }
+    .footer-copy { font-size: 0.83rem; color: #c0a080; margin-bottom: 8px; }
+    .footer-credit { font-size: 0.82rem; color: #c0a080; }
+    .footer-credit a { color: var(--gold); text-decoration: none; font-weight: 700; letter-spacing: 1px; transition: opacity 0.2s; }
+    .footer-credit a:hover { opacity: 0.75; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) { .cart-layout { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .cart-page { padding: 30px 0 52px; }
+      .card-body { padding: 18px; }
+      .cart-item { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAVBAR ─── -->
+<nav>
+  <a class="nav-brand" href="index.html">🎂 The Chef's Cakes &amp; Bakes</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="menu.html">Menu</a></li>
+    <li><a href="customcake.html">Custom Cakes</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="cart.html" class="active">🛒 Cart</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" role="button" tabindex="0" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="menu.html">Menu</a>
+  <a href="customcake.html">Custom Cakes</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+  <a href="cart.html" class="active">🛒 Cart</a>
+</div>
+
+<!-- ─── PAGE HEADER ─── -->
+<div class="page-header">
+  <div class="header-inner">
+    <div class="header-eyebrow">✦ Review Order</div>
+    <h1>Your <em>Cart</em></h1>
+    <div class="header-divider"></div>
+    <p>Review your order before placing it.</p>
+  </div>
+</div>
+
+<!-- ─── MAIN ─── -->
+<div class="wrapper">
+  <div class="cart-page">
+    <div class="cart-layout">
+
+      <!-- LEFT -->
+      <div class="left-col">
+
+        <!-- Cart Items -->
+        <div class="card">
+          <div class="card-header">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F7C873" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            <h2>Cart Items</h2>
+            <span class="item-badge" id="itemBadge">0</span>
+          </div>
+          <div id="cartContent"></div>
+        </div>
+
+        <!-- Customer Details (shown only when cart has items) -->
+        <div class="card" id="customerCard" style="display:none;">
+          <div class="card-header">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F7C873" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            <h2>Your Details</h2>
+          </div>
+          <div class="card-body">
+            <div class="form-fields">
+              <div class="fg">
+                <label for="custName">Full Name <span class="req">*</span></label>
+                <input type="text" id="custName" placeholder="Your full name" autocomplete="name"/>
+              </div>
+              <div class="fg">
+                <label for="custPhone">Phone Number <span class="req">*</span></label>
+                <input type="tel" id="custPhone" placeholder="+91 XXXXX XXXXX" autocomplete="tel"/>
+              </div>
+              <div class="fg">
+                <label for="custEmail">Email <span style="color:#b08060;font-weight:400;">(optional)</span></label>
+                <input type="email" id="custEmail" placeholder="your@email.com" autocomplete="email"/>
+              </div>
+              <div class="fg" id="custAddrGroup" style="display:none;">
+                <label for="custAddr">Delivery Address <span class="req">*</span></label>
+                <input type="text" id="custAddr" placeholder="Full address in Ejipura, Bangalore"/>
+                <span class="hint">Delivery available within Ejipura only.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /left-col -->
+
+      <!-- RIGHT (shown only when cart has items) -->
+      <div class="right-col" id="rightCol" style="display:none;">
+
+        <!-- Delivery Option -->
+        <div class="card">
+          <div class="card-header">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F7C873" stroke-width="2"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"/><rect x="9" y="11" width="14" height="10" rx="1"/><circle cx="12" cy="21" r="1"/><circle cx="20" cy="21" r="1"/></svg>
+            <h2>Delivery Option</h2>
+          </div>
+          <div class="card-body">
+            <div class="delivery-opts">
+              <label class="delivery-opt selected" id="optPickupLabel">
+                <input type="radio" name="delivery" value="pickup" id="radioPickup" checked/>
+                <div class="opt-info">
+                  <strong>🏪 Pickup from Bakery</strong>
+                  <span>Collect from our shop in Ejipura</span>
+                </div>
+                <span class="opt-price">Free</span>
+              </label>
+              <label class="delivery-opt" id="optDeliveryLabel">
+                <input type="radio" name="delivery" value="delivery" id="radioDelivery"/>
+                <div class="opt-info">
+                  <strong>🛵 Home Delivery</strong>
+                  <span>Delivered within Ejipura</span>
+                </div>
+                <span class="opt-price">₹100</span>
+              </label>
+            </div>
+            <div class="addr-box" id="deliveryAddrBox">
+              <label for="deliveryAddr">Delivery Address <span class="req">*</span></label>
+              <textarea id="deliveryAddr" placeholder="Enter your full address in Ejipura…"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="card">
+          <div class="card-header">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F7C873" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6m-6 4h4"/></svg>
+            <h2>Order Summary</h2>
+          </div>
+          <div class="card-body">
+            <div class="summary-rows">
+              <div class="s-row"><span class="lbl">Product Total</span><span class="val" id="summarySubtotal">₹0</span></div>
+              <div class="s-row"><span class="lbl">Delivery Charge</span><span class="val" id="summaryDelivery">₹0</span></div>
+              <div class="s-row grand"><span class="lbl">Grand Total</span><span class="val" id="summaryTotal">₹0</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Service Note -->
+        <div class="service-note">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D8A25E" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+          <p>
+            <strong>Serving Ejipura, Bangalore only.</strong><br/>
+            Delivery available within Ejipura. Delivery charge ₹100. Pickup is always free. Please order at least 1 day in advance.
+          </p>
+        </div>
+
+        <!-- Place Order -->
+        <button class="btn-order" id="placeOrderBtn" type="button">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.025.507 3.934 1.395 5.608L0 24l6.572-1.395A11.935 11.935 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 0 1-5.006-1.373l-.36-.214-3.727.979.996-3.638-.235-.374A9.818 9.818 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182c5.43 0 9.818 4.388 9.818 9.818 0 5.43-4.388 9.818-9.818 9.818z"/></svg>
+          Place Order via WhatsApp
+        </button>
+
+      </div><!-- /right-col -->
+
+    </div>
+  </div>
+</div>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-brand">The Chef's Cakes &amp; Bakes</div>
+  <div class="footer-tagline">Serving Fresh Cakes in Ejipura, Bangalore</div>
+  <div class="footer-divider"></div>
+  <p class="footer-copy">© 2026 The Chef's Cakes &amp; Bakes. All Rights Reserved.</p>
+  <p class="footer-credit">Designed by <a href="https://www.instagram.com/echox_com/" target="_blank" rel="noopener">ECHOX</a></p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  /* ════════════════════
+     MOBILE NAV
+  ════════════════════ */
+  var hamburger  = document.getElementById('hamburger');
+  var mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', function () { hamburger.classList.toggle('open'); mobileMenu.classList.toggle('show'); });
+  hamburger.addEventListener('keydown', function (e) { if (e.key === 'Enter') hamburger.click(); });
+
+  /* ════════════════════
+     TOAST
+  ════════════════════ */
+  function showToast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(function () { t.classList.remove('show'); }, 3000);
+  }
+
+  /* ════════════════════
+     CART STORAGE  (key: cartItems)
+  ════════════════════ */
+  function getCart() {
+    try { return JSON.parse(localStorage.getItem('cartItems') || '[]'); } catch (e) { return []; }
+  }
+  function saveCart(cart) { localStorage.setItem('cartItems', JSON.stringify(cart)); }
+
+  /* ════════════════════
+     EMOJI MAP
+  ════════════════════ */
+  function cakeEmoji(name) {
+    var n = (name || '').toLowerCase();
+    if (n.includes('chocolate') || n.includes('truffle') || n.includes('kit kat')) return '🍫';
+    if (n.includes('red velvet'))   return '❤️';
+    if (n.includes('black forest')) return '🍒';
+    if (n.includes('butterscotch')) return '🍯';
+    if (n.includes('pineapple'))    return '🍍';
+    if (n.includes('strawberry'))   return '🍓';
+    if (n.includes('ferrero'))      return '🎁';
+    if (n.includes('rasmalai'))     return '🌟';
+    if (n.includes('rainbow'))      return '🌈';
+    if (n.includes('photo'))        return '📸';
+    if (n.includes('theme'))        return '🎨';
+    return '🎂';
+  }
+
+  /* ════════════════════
+     DELIVERY CHARGE
+  ════════════════════ */
+  function deliveryCharge() { return document.getElementById('radioDelivery').checked ? 100 : 0; }
+
+  /* ════════════════════
+     RENDER CART
+  ════════════════════ */
+  function renderCart() {
+    var cart     = getCart();
+    var content  = document.getElementById('cartContent');
+    var badge    = document.getElementById('itemBadge');
+    var right    = document.getElementById('rightCol');
+    var custCard = document.getElementById('customerCard');
+    var totalQty = cart.reduce(function (s, i) { return s + (i.quantity || 1); }, 0);
+    badge.textContent = totalQty;
+
+    if (cart.length === 0) {
+      right.style.display    = 'none';
+      custCard.style.display = 'none';
+      content.innerHTML =
+        '<div class="empty-state">' +
+          '<span class="empty-emoji">🛒</span>' +
+          '<h3>Your cart is empty</h3>' +
+          '<p>You haven\'t added any cakes yet.<br/>Head to our menu and pick your favourites!</p>' +
+          '<a href="menu.html" class="btn-browse">' +
+            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>' +
+            'Browse Menu' +
+          '</a>' +
+        '</div>';
+      return;
+    }
+
+    right.style.display    = 'flex';
+    custCard.style.display = 'block';
+
+    var html = '<div class="card-body"><div class="cart-items-list">';
+    for (var i = 0; i < cart.length; i++) {
+      var item      = cart[i];
+      var qty       = item.quantity || 1;
+      var unitPrice = item.price    || 0;
+      var lineTotal = unitPrice * qty;
+      html +=
+        '<div class="cart-item">' +
+          '<div class="item-icon">' + cakeEmoji(item.name) + '</div>' +
+          '<div class="item-info">' +
+            '<div class="item-name">'  + (item.name || 'Cake') + '</div>' +
+            '<div class="item-tags">'  +
+              (item.weight ? '<span class="tag tag-weight">⚖️ ' + item.weight + '</span>' : '') +
+              (item.type   ? '<span class="tag tag-type">'       + item.type   + '</span>' : '') +
+            '</div>' +
+            '<div class="item-price-row">' +
+              '<span class="item-unit-price">₹' + unitPrice + ' each</span>' +
+              '<span class="item-line-total">₹' + lineTotal + '</span>' +
+            '</div>' +
+            '<div class="qty-controls">' +
+              '<button class="qty-btn" onclick="changeQty(' + i + ',-1)">−</button>' +
+              '<span class="qty-num">' + qty + '</span>' +
+              '<button class="qty-btn" onclick="changeQty(' + i + ', 1)">+</button>' +
+            '</div>' +
+          '</div>' +
+          '<button class="btn-remove" onclick="removeItem(' + i + ')" title="Remove">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">' +
+              '<polyline points="3 6 5 6 21 6"/>' +
+              '<path d="M19 6l-1 14H6L5 6"/>' +
+              '<path d="M10 11v6m4-6v6"/>' +
+              '<path d="M9 6V4h6v2"/>' +
+            '</svg>' +
+          '</button>' +
+        '</div>';
+    }
+    html += '</div></div>';
+    content.innerHTML = html;
+    updateSummary();
+  }
+
+  /* ════════════════════
+     QUANTITY
+  ════════════════════ */
+  function changeQty(idx, delta) {
+    var cart = getCart();
+    if (!cart[idx]) return;
+    cart[idx].quantity = Math.max(1, (cart[idx].quantity || 1) + delta);
+    saveCart(cart);
+    renderCart();
+  }
+
+  /* ════════════════════
+     REMOVE
+  ════════════════════ */
+  function removeItem(idx) {
+    var cart    = getCart();
+    var removed = cart.splice(idx, 1);
+    saveCart(cart);
+    renderCart();
+    if (removed.length) showToast('🗑️ ' + (removed[0].name || 'Item') + ' removed.');
+  }
+
+  /* ════════════════════
+     SUMMARY
+  ════════════════════ */
+  function updateSummary() {
+    var cart     = getCart();
+    var subtotal = cart.reduce(function (s, i) { return s + (i.price || 0) * (i.quantity || 1); }, 0);
+    var del      = deliveryCharge();
+    document.getElementById('summarySubtotal').textContent = '₹' + subtotal;
+    document.getElementById('summaryDelivery').textContent = del === 0 ? '₹0 (Free)' : '₹' + del;
+    document.getElementById('summaryTotal').textContent    = '₹' + (subtotal + del);
+    /* sync customer address field */
+    var show = document.getElementById('radioDelivery').checked;
+    document.getElementById('custAddrGroup').style.display = show ? 'flex' : 'none';
+  }
+
+  /* ════════════════════
+     DELIVERY RADIO
+  ════════════════════ */
+  document.getElementById('radioPickup').addEventListener('change', function () {
+    document.getElementById('optPickupLabel').classList.add('selected');
+    document.getElementById('optDeliveryLabel').classList.remove('selected');
+    document.getElementById('deliveryAddrBox').classList.remove('show');
+    updateSummary();
+  });
+  document.getElementById('radioDelivery').addEventListener('change', function () {
+    document.getElementById('optDeliveryLabel').classList.add('selected');
+    document.getElementById('optPickupLabel').classList.remove('selected');
+    document.getElementById('deliveryAddrBox').classList.add('show');
+    updateSummary();
+  });
+
+  /* ════════════════════
+     WHATSAPP ORDER
+  ════════════════════ */
+  document.getElementById('placeOrderBtn').addEventListener('click', function () {
+    var cart = getCart();
+    if (cart.length === 0) { showToast('⚠️ Your cart is empty!'); return; }
+
+    var name       = document.getElementById('custName').value.trim();
+    var phone      = document.getElementById('custPhone').value.trim();
+    var email      = document.getElementById('custEmail').value.trim();
+    var isDelivery = document.getElementById('radioDelivery').checked;
+    var delAddr    = isDelivery
+      ? (document.getElementById('deliveryAddr').value.trim() || document.getElementById('custAddr').value.trim())
+      : '';
+
+    if (!name)                    { showToast('⚠️ Please enter your full name.'); return; }
+    if (!phone)                   { showToast('⚠️ Please enter your phone number.'); return; }
+    if (isDelivery && !delAddr)   { showToast('⚠️ Please enter your delivery address.'); return; }
+
+    var subtotal = cart.reduce(function (s, i) { return s + (i.price || 0) * (i.quantity || 1); }, 0);
+    var del      = isDelivery ? 100 : 0;
+    var total    = subtotal + del;
+
+    var lines = cart.map(function (i) {
+      return '• ' + (i.name || 'Cake') +
+        (i.weight ? ' – ' + i.weight : '') +
+        (i.type   ? ' – ' + i.type   : '') +
+        ' × ' + (i.quantity || 1) +
+        ' = ₹' + ((i.price || 0) * (i.quantity || 1));
+    }).join('\n');
+
+    var msg  = 'Hello Chef\'s Cakes & Bakes 🎂\n\n';
+        msg += '✨ *New Cake Order* ✨\n';
+        msg += '━━━━━━━━━━━━━━━━━━━\n\n';
+        msg += '🛒 *Items:*\n' + lines + '\n\n';
+        msg += '🚗 *Delivery:* ' + (isDelivery ? 'Home Delivery' : 'Pickup from Bakery') + '\n\n';
+        msg += '💰 *Charges:*\n';
+        msg += '  Product Total : ₹' + subtotal + '\n';
+        msg += '  Delivery      : ' + (del === 0 ? '₹0 (Free Pickup)' : '₹' + del) + '\n';
+        msg += '  *Grand Total  : ₹' + total + '*\n\n';
+        msg += '👤 *Customer Details:*\n';
+        msg += '  Name  : ' + name  + '\n';
+        msg += '  Phone : ' + phone + '\n';
+    if (email)              msg += '  Email : ' + email   + '\n';
+    if (isDelivery && delAddr) msg += '  Address : ' + delAddr + '\n';
+        msg += '\n━━━━━━━━━━━━━━━━━━━\nThank you! 🙏';
+
+    window.open('https://wa.me/919901035778?text=' + encodeURIComponent(msg), '_blank');
+    showToast('✅ Opening WhatsApp — see you there!');
+  });
+
+  /* ════════════════════
+     INIT
+  ════════════════════ */
+  renderCart();
+</script>
+</body>
+</html>

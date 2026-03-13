@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us – The Chef's Cakes & Bakes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brown:     #4A2C14;
+      --cream-bg:  #F8F4F1;
+      --gold:      #F7C873;
+      --caramel:   #D8A25E;
+      --dark-text: #2E1B0F;
+      --card-bg:   #FFF8F2;
+      --shadow:    0 4px 20px rgba(74,44,20,0.10);
+      --radius:    14px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--cream-bg);
+      color: var(--dark-text);
+      min-height: 100vh;
+    }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      position: sticky; top: 0; z-index: 1000;
+      background: var(--brown);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    }
+    .nav-brand {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold);
+      font-size: 1.35rem;
+      font-weight: 700;
+      text-decoration: none;
+      padding: 16px 0;
+      white-space: nowrap;
+      letter-spacing: 0.5px;
+    }
+    .nav-links {
+      display: flex; gap: 6px; align-items: center;
+      list-style: none;
+    }
+    .nav-links a {
+      color: #f0e6d6;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 20px;
+      transition: background 0.2s, color 0.2s;
+      letter-spacing: 0.3px;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      background: var(--gold);
+      color: var(--brown);
+    }
+    .hamburger {
+      display: none;
+      flex-direction: column; gap: 5px; cursor: pointer;
+      padding: 10px 0;
+    }
+    .hamburger span {
+      display: block; width: 26px; height: 2.5px;
+      background: var(--gold); border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      background: var(--brown);
+      padding: 10px 5% 18px;
+      gap: 4px;
+    }
+    .mobile-menu a {
+      color: #f0e6d6; text-decoration: none;
+      font-size: 1rem; font-weight: 600;
+      padding: 11px 16px; border-radius: 10px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .mobile-menu a:hover, .mobile-menu a.active {
+      background: var(--gold); color: var(--brown);
+    }
+    .mobile-menu.show { display: flex; }
+
+    /* ─── PAGE HEADER ─── */
+    .page-header {
+      background: linear-gradient(135deg, var(--brown) 0%, #6b3e1e 55%, #8a5030 100%);
+      text-align: center;
+      padding: 72px 5% 62px;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f7c873' fill-opacity='0.055'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .page-header::after {
+      content: '';
+      position: absolute;
+      width: 360px; height: 360px; border-radius: 50%;
+      background: rgba(247,200,115,0.055);
+      top: -90px; right: -70px;
+      pointer-events: none;
+    }
+    .header-inner { position: relative; z-index: 1; }
+    .header-eyebrow {
+      display: inline-block;
+      font-size: 0.76rem; font-weight: 700;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(247,200,115,0.12);
+      border: 1px solid rgba(247,200,115,0.3);
+      padding: 5px 16px; border-radius: 20px;
+      margin-bottom: 18px;
+    }
+    .page-header h1 {
+      font-family: 'Playfair Display', serif;
+      color: #fff;
+      font-size: clamp(2rem, 5.5vw, 3.3rem);
+      line-height: 1.18;
+      margin-bottom: 16px;
+    }
+    .page-header h1 em { color: var(--gold); font-style: italic; }
+    .header-divider {
+      width: 56px; height: 3px;
+      background: var(--gold);
+      margin: 0 auto 20px;
+      border-radius: 2px;
+    }
+    .page-header p {
+      color: #e8d8c6;
+      font-size: clamp(0.97rem, 2.5vw, 1.12rem);
+      max-width: 540px; margin: 0 auto;
+      line-height: 1.75;
+    }
+
+    /* ─── WRAPPER ─── */
+    .wrapper { max-width: 1100px; margin: 0 auto; padding: 0 5%; }
+
+    /* ─── SHARED SECTION LABELS ─── */
+    .sec-eyebrow {
+      font-size: 0.74rem; font-weight: 700;
+      letter-spacing: 2.8px; text-transform: uppercase;
+      color: var(--caramel); margin-bottom: 6px;
+      display: block;
+    }
+    .sec-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 3.5vw, 2rem);
+      color: var(--brown);
+      line-height: 1.22;
+      margin-bottom: 10px;
+    }
+    .sec-line {
+      width: 52px; height: 3px;
+      background: linear-gradient(to right, var(--gold), transparent);
+      border-radius: 2px;
+      margin-bottom: 22px;
+    }
+
+    /* ─── SCROLL REVEAL ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ══════════════════════════════════════
+       ABOUT SECTION
+    ══════════════════════════════════════ */
+    .about-section { padding: 76px 0 60px; }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: center;
+    }
+    .about-img-stack {
+      position: relative;
+      height: 420px;
+    }
+    .about-img-main {
+      position: absolute;
+      width: 75%; height: 85%;
+      top: 0; left: 0;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(74,44,20,0.18);
+      background: linear-gradient(145deg, #f0e0cc, #e8d0b8);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 10px;
+      border: 2px solid #ecddd0;
+    }
+    .about-img-accent {
+      position: absolute;
+      width: 52%; height: 52%;
+      bottom: 0; right: 0;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(74,44,20,0.15);
+      background: linear-gradient(145deg, #e8d4b8, #dcc4a0);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 8px;
+      border: 2px solid #dcc9b5;
+    }
+    .about-img-main img,
+    .about-img-accent img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+    .img-ph-icon { opacity: 0.32; }
+    .img-ph-label {
+      font-size: 0.76rem; font-weight: 700;
+      color: #9a6b44; letter-spacing: 0.5px;
+    }
+    /* gold badge on stack */
+    .about-badge {
+      position: absolute;
+      bottom: 62px; left: 58%;
+      transform: translateX(-50%);
+      background: var(--brown);
+      color: var(--gold);
+      font-family: 'Playfair Display', serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 10px 18px;
+      border-radius: 30px;
+      white-space: nowrap;
+      box-shadow: 0 6px 18px rgba(74,44,20,0.28);
+      border: 1.5px solid rgba(247,200,115,0.35);
+      z-index: 2;
+    }
+    .about-text p {
+      font-size: 1rem;
+      line-height: 1.85;
+      color: #5a3a20;
+      margin-bottom: 18px;
+    }
+    .about-text p:last-child { margin-bottom: 0; }
+    .about-stats {
+      display: flex; gap: 28px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+    .stat-item {
+      background: var(--card-bg);
+      border: 1.5px solid #ecddd0;
+      border-radius: 12px;
+      padding: 16px 22px;
+      text-align: center;
+      flex: 1; min-width: 90px;
+      box-shadow: var(--shadow);
+    }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      color: var(--brown);
+      font-weight: 700;
+      line-height: 1;
+    }
+    .stat-num span { color: var(--caramel); }
+    .stat-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #9a6b44;
+      margin-top: 4px;
+      letter-spacing: 0.3px;
+    }
+
+    /* ══════════════════════════════════════
+       WHY CHOOSE US
+    ══════════════════════════════════════ */
+    .why-section {
+      padding: 60px 0 70px;
+      background: linear-gradient(180deg, var(--cream-bg) 0%, #f2ece6 100%);
+    }
+    .why-header { text-align: center; margin-bottom: 44px; }
+    .why-header .sec-line { margin-left: auto; margin-right: auto; }
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px;
+    }
+    .why-card {
+      background: var(--card-bg);
+      border: 1.5px solid #ecddd0;
+      border-radius: var(--radius);
+      padding: 32px 22px 28px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: transform 0.28s, box-shadow 0.28s, border-color 0.28s;
+      position: relative;
+      overflow: hidden;
+    }
+    .why-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--caramel));
+      opacity: 0;
+      transition: opacity 0.28s;
+    }
+    .why-card:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 14px 36px rgba(74,44,20,0.16);
+      border-color: var(--gold);
+    }
+    .why-card:hover::before { opacity: 1; }
+    .why-icon {
+      width: 62px; height: 62px;
+      background: linear-gradient(135deg, var(--brown), #6b3e1e);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 18px;
+      box-shadow: 0 6px 18px rgba(74,44,20,0.22);
+      transition: transform 0.28s;
+    }
+    .why-card:hover .why-icon { transform: scale(1.1) rotate(-5deg); }
+    .why-icon svg { width: 28px; height: 28px; stroke: var(--gold); }
+    .why-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      color: var(--brown);
+      margin-bottom: 10px;
+    }
+    .why-card p {
+      font-size: 0.88rem;
+      color: #7a5030;
+      line-height: 1.7;
+    }
+
+    /* ══════════════════════════════════════
+       SPECIALTIES
+    ══════════════════════════════════════ */
+    .specialties-section { padding: 70px 0 60px; }
+    .specialties-header { margin-bottom: 40px; }
+    .spec-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .spec-card {
+      background: var(--card-bg);
+      border: 1.5px solid #ecddd0;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .spec-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 34px rgba(74,44,20,0.18);
+    }
+    .spec-img {
+      aspect-ratio: 3 / 3.5;
+      overflow: hidden;
+      position: relative;
+    }
+    .spec-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  position: relative;
+  z-index: 2;
+}
+    .spec-card:hover .spec-img img { transform: scale(1.07); }
+    .spec-placeholder {
+      width: 100%; height: 100%;
+      background: linear-gradient(145deg, #f0e0cc, #e8d0b8);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 10px;
+      position: absolute; inset: 0;
+    }
+    .spec-placeholder svg { opacity: 0.3; }
+    .spec-placeholder span {
+      font-size: 0.76rem; font-weight: 700;
+      color: #9a6b44; letter-spacing: 0.4px;
+    }
+    .spec-body {
+      padding: 16px 18px 18px;
+      border-top: 1.5px solid #ecddd0;
+    }
+    .spec-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--brown);
+      margin-bottom: 5px;
+    }
+    .spec-body p {
+      font-size: 0.82rem;
+      color: #8a5c30;
+      line-height: 1.6;
+    }
+    .spec-tag {
+      display: inline-block;
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.5px;
+      background: var(--gold);
+      color: var(--brown);
+      padding: 3px 10px;
+      border-radius: 10px;
+      margin-bottom: 7px;
+    }
+
+    /* ══════════════════════════════════════
+       CTA SECTION
+    ══════════════════════════════════════ */
+    .cta-section {
+      background: linear-gradient(135deg, var(--brown) 0%, #5e3518 100%);
+      padding: 74px 5%;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='2.5' fill='%23f7c873' fill-opacity='0.06'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .cta-inner { position: relative; z-index: 1; max-width: 620px; margin: 0 auto; }
+    .cta-emoji { font-size: 2rem; display: block; margin-bottom: 14px; }
+    .cta-section h2 {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold);
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      margin-bottom: 14px;
+      line-height: 1.2;
+    }
+    .cta-section p {
+      color: #e8d4be;
+      font-size: clamp(0.95rem, 2vw, 1.07rem);
+      line-height: 1.78;
+      margin-bottom: 34px;
+    }
+    .btn-cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--gold);
+      color: var(--brown);
+      text-decoration: none;
+      font-family: 'Lato', sans-serif;
+      font-size: 1rem; font-weight: 800;
+      padding: 16px 38px;
+      border-radius: 50px;
+      box-shadow: 0 6px 22px rgba(247,200,115,0.35);
+      transition: background 0.22s, transform 0.18s, box-shadow 0.22s;
+      letter-spacing: 0.3px;
+    }
+    .btn-cta:hover {
+      background: var(--caramel);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(216,162,94,0.4);
+    }
+    .btn-cta svg { width: 19px; height: 19px; }
+
+    /* ══════════════════════════════════════
+       SERVICE AREA
+    ══════════════════════════════════════ */
+    .service-section { padding: 58px 0; }
+    .service-card {
+      background: linear-gradient(135deg, #fff4e6 0%, #fff8f2 100%);
+      border: 2px solid var(--gold);
+      border-radius: 18px;
+      padding: 40px 44px;
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      box-shadow: var(--shadow);
+    }
+    .service-icon-wrap {
+      width: 80px; height: 80px;
+      background: var(--brown);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 6px 20px rgba(74,44,20,0.25);
+    }
+    .service-icon-wrap svg { width: 36px; height: 36px; stroke: var(--gold); }
+    .service-text h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--brown);
+      margin-bottom: 10px;
+    }
+    .service-text p {
+      font-size: 0.95rem;
+      color: #7a5030;
+      line-height: 1.7;
+    }
+    .service-pills {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      margin-top: 14px;
+    }
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--brown);
+      color: var(--gold);
+      font-size: 0.8rem; font-weight: 700;
+      padding: 6px 14px; border-radius: 20px;
+      letter-spacing: 0.3px;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--brown);
+      text-align: center;
+      padding: 42px 5% 28px;
+      color: #f0e6d6;
+    }
+    .footer-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; color: var(--gold);
+      margin-bottom: 8px; font-style: italic;
+    }
+    .footer-tagline { font-size: 0.9rem; margin-bottom: 18px; color: #d4bfa8; }
+    .footer-divider {
+      width: 50px; height: 2px;
+      background: var(--gold); opacity: 0.4;
+      margin: 0 auto 16px;
+    }
+    .footer-copy { font-size: 0.83rem; color: #c0a080; margin-bottom: 8px; }
+    .footer-credit { font-size: 0.82rem; color: #c0a080; }
+    .footer-credit a {
+      color: var(--gold); text-decoration: none;
+      font-weight: 700; letter-spacing: 1px;
+      transition: opacity 0.2s;
+    }
+    .footer-credit a:hover { opacity: 0.75; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 960px) {
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .about-img-stack { height: 300px; }
+      .why-grid { grid-template-columns: repeat(2, 1fr); }
+      .spec-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 700px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .why-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+      .spec-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+      .service-card { flex-direction: column; text-align: center; padding: 30px 22px; gap: 22px; }
+      .service-pills { justify-content: center; }
+    }
+    @media (max-width: 440px) {
+      .why-grid { grid-template-columns: 1fr; }
+      .spec-grid { grid-template-columns: 1fr; }
+      .about-stats { gap: 14px; }
+      .about-img-stack { height: 240px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAVBAR ─── -->
+<nav>
+  <a class="nav-brand" href="index.html">🎂 The Chef's Cakes &amp; Bakes</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="menu.html">Menu</a></li>
+    <li><a href="customcake.html">Custom Cakes</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="cart.html">🛒 Cart</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" role="button" tabindex="0" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="menu.html">Menu</a>
+  <a href="customcake.html">Custom Cakes</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="about.html" class="active">About</a>
+  <a href="contact.html">Contact</a>
+  <a href="cart.html">🛒 Cart</a>
+</div>
+
+<!-- ─── PAGE HEADER ─── -->
+<div class="page-header">
+  <div class="header-inner">
+    <div class="header-eyebrow">✦ Our Story</div>
+    <h1>About <em>The Chef's Cakes &amp; Bakes</em></h1>
+    <div class="header-divider"></div>
+    <p>Freshly baked cakes made with love for every celebration.</p>
+  </div>
+</div>
+
+<!-- ─── ABOUT SECTION ─── -->
+<section class="about-section">
+  <div class="wrapper">
+    <div class="about-grid">
+
+      <!-- Image Stack -->
+      <div class="about-img-stack reveal">
+        <div class="about-img-main">
+          <img src="41.png" alt="Chef's Cakes & Bakes bakery" onerror="this.style.display='none'"/>
+          <svg class="img-ph-icon" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#9a6b44" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+          <span class="img-ph-label">41.png</span>
+        </div>
+        <div class="about-img-accent">
+          <img src="42.png" alt="Cake decoration" onerror="this.style.display='none'"/>
+          <svg class="img-ph-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#9a6b44" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+          <span class="img-ph-label">42.png</span>
+        </div>
+        <div class="about-badge">🏆 Trusted by Ejipura since 2020</div>
+      </div>
+
+      <!-- Text -->
+      <div class="about-text reveal">
+        <span class="sec-eyebrow">Who We Are</span>
+        <h2 class="sec-title">Baked Fresh. Served with Love.</h2>
+        <div class="sec-line"></div>
+        <p>
+          Chef's Cakes &amp; Bakes is a local bakery serving delicious freshly baked cakes in Ejipura, Bangalore. We specialize in birthday cakes, anniversary cakes, photo cakes, and custom cake designs — made for every celebration, big or small.
+        </p>
+        <p>
+          Our goal is to bring joy to your special moments with cakes that look beautiful and taste absolutely amazing. Every cake that leaves our kitchen is crafted with the finest ingredients, shaped by skilled hands, and finished with the care your occasion deserves.
+        </p>
+        <p>
+          Whether you want a classic chocolate truffle, a dreamy red velvet, or a fully themed custom creation — we are here to make it happen, just the way you imagine it.
+        </p>
+        <div class="about-stats">
+          <div class="stat-item reveal">
+            <div class="stat-num">500<span>+</span></div>
+            <div class="stat-label">Happy Customers</div>
+          </div>
+          <div class="stat-item reveal">
+            <div class="stat-num">7<span>+</span></div>
+            <div class="stat-label">Cake Flavours</div>
+          </div>
+          <div class="stat-item reveal">
+            <div class="stat-num">4<span>+</span></div>
+            <div class="stat-label">Years Serving</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── WHY CHOOSE US ─── -->
+<section class="why-section">
+  <div class="wrapper">
+    <div class="why-header reveal">
+      <span class="sec-eyebrow">Why Choose Us</span>
+      <h2 class="sec-title">What Makes Us Special</h2>
+      <div class="sec-line" style="margin:0 auto;"></div>
+    </div>
+    <div class="why-grid">
+
+      <div class="why-card reveal">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+            <path d="M8 12l3 3 5-5"/>
+          </svg>
+        </div>
+        <h3>Fresh Ingredients</h3>
+        <p>We use only high quality, hand-picked ingredients to bake every cake fresh — no preservatives, no compromise.</p>
+      </div>
+
+      <div class="why-card reveal">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
+            <path d="M12 20h9"/>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+          </svg>
+        </div>
+        <h3>Custom Designs</h3>
+        <p>Get a unique cake designed specially for your event — from theme colours to cake toppers, fully personalised.</p>
+      </div>
+
+      <div class="why-card reveal">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </div>
+        <h3>Made with Care</h3>
+        <p>Every cake is lovingly handmade with close attention to detail — from batter to final decoration.</p>
+      </div>
+
+      <div class="why-card reveal">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
+            <path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"/>
+            <rect x="9" y="11" width="14" height="10" rx="1"/>
+            <circle cx="12" cy="21" r="1"/>
+            <circle cx="20" cy="21" r="1"/>
+          </svg>
+        </div>
+        <h3>Local Delivery</h3>
+        <p>Serving customers across Ejipura with fresh cakes delivered right to your doorstep for just ₹100.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── SPECIALTIES ─── -->
+<section class="specialties-section">
+  <div class="wrapper">
+    <div class="specialties-header reveal">
+      <span class="sec-eyebrow">Our Menu Highlights</span>
+      <h2 class="sec-title">Our Specialties</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="spec-grid">
+
+      <!-- Birthday Cakes -->
+      <div class="spec-card reveal">
+        <div class="spec-img">
+          <div class="spec-placeholder">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9a6b44" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            <span>43.png</span>
+          </div>
+          <img src="43.png" alt="Birthday Cakes" loading="lazy" onerror="this.style.display='none'"/>
+        </div>
+        <div class="spec-body">
+          <div class="spec-tag">🎂 Popular</div>
+          <h3>Birthday Cakes</h3>
+          <p>Vibrant, themed birthday cakes for kids and adults — personalized with any message or design.</p>
+        </div>
+      </div>
+
+      <!-- Anniversary Cakes -->
+      <div class="spec-card reveal">
+        <div class="spec-img">
+          <div class="spec-placeholder">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9a6b44" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            <span>44.png</span>
+          </div>
+          <img src="44.png" alt="Anniversary Cakes" loading="lazy" onerror="this.style.display='none'"/>
+        </div>
+        <div class="spec-body">
+          <div class="spec-tag">💍 Elegant</div>
+          <h3>Anniversary Cakes</h3>
+          <p>Elegant two-tier and heart-shaped cakes to celebrate your love story in the sweetest way.</p>
+        </div>
+      </div>
+
+      <!-- Custom Theme Cakes -->
+      <div class="spec-card reveal">
+        <div class="spec-img">
+          <div class="spec-placeholder">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9a6b44" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            <span>45.png</span>
+          </div>
+          <img src="45.png" alt="Custom Cakes" loading="lazy" onerror="this.style.display='none'"/>
+        </div>
+        <div class="spec-body">
+          <div class="spec-tag">🎨 Custom</div>
+          <h3>Custom Theme Cakes</h3>
+          <p>From superheroes to floral elegance — we create any theme cake you can imagine.</p>
+        </div>
+      </div>
+
+      <!-- Photo Cakes -->
+      <div class="spec-card reveal">
+        <div class="spec-img">
+          <div class="spec-placeholder">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9a6b44" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            <span>46.png</span>
+          </div>
+          <img src="46.png" alt="Photo Cakes" loading="lazy" onerror="this.style.display='none'"/>
+        </div>
+        <div class="spec-body">
+          <div class="spec-tag">📸 Trending</div>
+          <h3>Photo Cakes</h3>
+          <p>Print your favourite photo directly on the cake — perfect for surprise parties and heartfelt gifts.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA SECTION ─── -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <span class="cta-emoji">🎂</span>
+    <h2>Design Your Own Custom Cake</h2>
+    <p>Send us your design idea and we will create a cake specially for your celebration — made fresh, made beautifully, made just for you.</p>
+    <a href="customcake.html" class="btn-cta">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <path d="M12 20h9"/>
+        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+      </svg>
+      Order Custom Cake
+    </a>
+  </div>
+</section>
+
+<!-- ─── SERVICE AREA ─── -->
+<section class="service-section">
+  <div class="wrapper">
+    <div class="service-card reveal">
+      <div class="service-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+          <circle cx="12" cy="9" r="2.5"/>
+        </svg>
+      </div>
+      <div class="service-text">
+        <h3>Serving Fresh Cakes in Ejipura, Bangalore</h3>
+        <p>
+          We are a proudly local bakery rooted in the Ejipura community. All our cakes are baked fresh on order and delivered warm to your door. Currently delivery is available <strong>within Ejipura only</strong> — pickup from our bakery is always welcome!
+        </p>
+        <div class="service-pills">
+          <span class="pill">📍 Ejipura, Bangalore</span>
+          <span class="pill">🛵 Delivery ₹100</span>
+          <span class="pill">🏪 Pickup Available</span>
+          <span class="pill">⏱ 1 Day Advance Order</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-brand">The Chef's Cakes &amp; Bakes</div>
+  <div class="footer-tagline">Serving Fresh Cakes in Ejipura, Bangalore</div>
+  <div class="footer-divider"></div>
+  <p class="footer-copy">© 2026 The Chef's Cakes &amp; Bakes. All Rights Reserved.</p>
+  <p class="footer-credit">Designed by <a href="https://www.instagram.com/echox_com/" target="_blank" rel="noopener">ECHOX</a></p>
+</footer>
+
+<script>
+  /* ── Mobile Nav ── */
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('show');
+  });
+  hamburger.addEventListener('keydown', e => {
+    if (e.key === 'Enter') hamburger.click();
+  });
+
+  /* ── Scroll Reveal ── */
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 70);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  revealEls.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

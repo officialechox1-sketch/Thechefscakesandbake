@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gallery – The Chef's Cakes &amp; Bakes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    /* ═══════════════════════════════
+       RESET & ROOT
+    ═══════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html  { scroll-behavior: smooth; }
+    body  { font-family: 'Lato', sans-serif; background: #F8F4F1; color: #2E1B0F; overflow-x: hidden; }
+    img   { display: block; max-width: 100%; }
+    a     { text-decoration: none; color: inherit; }
+    ul    { list-style: none; }
+    button { font-family: 'Lato', sans-serif; cursor: pointer; }
+
+    :root {
+      --brown:   #4A2C14;
+      --cream:   #F8F4F1;
+      --gold:    #F7C873;
+      --caramel: #D8A25E;
+      --dark:    #2E1B0F;
+      --card:    #FFF8F2;
+      --border:  #ECD9C6;
+      --muted:   #9A7050;
+      --shadow:  0 4px 22px rgba(74,44,20,.11);
+      --rise:    0 14px 42px rgba(74,44,20,.20);
+      --r:       14px;
+    }
+
+    /* ═══════════════════════════════
+       SCROLLBAR
+    ═══════════════════════════════ */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--cream); }
+    ::-webkit-scrollbar-thumb { background: var(--caramel); border-radius: 3px; }
+
+    /* ═══════════════════════════════
+       NAVBAR
+    ═══════════════════════════════ */
+    .navbar {
+      position: sticky; top: 0; z-index: 1000;
+      background: var(--brown);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%;
+      box-shadow: 0 2px 16px rgba(0,0,0,.24);
+    }
+    .nav-brand {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold); font-size: 1.3rem; font-weight: 700;
+      padding: 15px 0; white-space: nowrap; letter-spacing: .4px;
+    }
+    .nav-links { display: flex; gap: 2px; align-items: center; }
+    .nav-links a {
+      color: #f0e6d6; font-size: .86rem; font-weight: 700;
+      padding: 7px 11px; border-radius: 20px;
+      transition: background .2s, color .2s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { background: var(--gold); color: var(--brown); }
+
+    .burger {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; padding: 10px 0; cursor: pointer;
+    }
+    .burger span {
+      display: block; width: 26px; height: 2.5px;
+      background: var(--gold); border-radius: 2px; transition: all .3s;
+    }
+    .burger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+    .burger.open span:nth-child(2) { opacity: 0; }
+    .burger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+    .mob-nav {
+      display: none; flex-direction: column;
+      background: var(--brown); padding: 8px 5% 18px; gap: 3px;
+    }
+    .mob-nav.open { display: flex; }
+    .mob-nav a {
+      color: #f0e6d6; font-size: .97rem; font-weight: 700;
+      padding: 11px 15px; border-radius: 10px;
+      transition: background .2s, color .2s;
+    }
+    .mob-nav a:hover,
+    .mob-nav a.active { background: var(--gold); color: var(--brown); }
+
+    /* ═══════════════════════════════
+       HERO HEADER
+    ═══════════════════════════════ */
+    .hero {
+      background: linear-gradient(135deg, #4A2C14 0%, #5c3418 48%, #7a4a22 100%);
+      padding: 80px 5% 68px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23f7c873' fill-opacity='0.055'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; z-index: 1; }
+    .hero-pill {
+      display: inline-block;
+      font-size: .72rem; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--gold);
+      background: rgba(247,200,115,.13);
+      border: 1px solid rgba(247,200,115,.3);
+      padding: 5px 16px; border-radius: 20px; margin-bottom: 18px;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      color: #fff;
+      font-size: clamp(2rem, 5.5vw, 3.4rem);
+      line-height: 1.14;
+      margin-bottom: 16px;
+    }
+    .hero h1 em { color: var(--gold); font-style: italic; }
+    .hero-bar { width: 54px; height: 3px; background: var(--gold); margin: 0 auto 18px; border-radius: 2px; }
+    .hero p {
+      color: #e8d8c6;
+      font-size: clamp(.95rem, 2.2vw, 1.1rem);
+      max-width: 560px; margin: 0 auto; line-height: 1.75;
+    }
+
+    /* ═══════════════════════════════
+       FILTER BAR
+    ═══════════════════════════════ */
+    .filter-bar {
+      background: var(--card);
+      border-bottom: 1.5px solid var(--border);
+      padding: 16px 5%;
+      display: flex; align-items: center;
+      justify-content: center; gap: 10px;
+      flex-wrap: wrap;
+      position: sticky; top: 54px; z-index: 900;
+      box-shadow: 0 2px 10px rgba(74,44,20,.06);
+    }
+    .fbtn {
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+      font-family: 'Lato', sans-serif;
+      font-size: .83rem; font-weight: 700;
+      padding: 8px 20px; border-radius: 24px;
+      letter-spacing: .2px;
+      transition: all .22s;
+    }
+    .fbtn:hover  { background: var(--caramel); border-color: var(--caramel); color: #fff; }
+    .fbtn.active { background: var(--brown);   border-color: var(--brown);   color: var(--gold); }
+
+    /* ═══════════════════════════════
+       WRAPPER
+    ═══════════════════════════════ */
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 5%; }
+
+    /* ═══════════════════════════════
+       GALLERY SECTION
+    ═══════════════════════════════ */
+    .gallery-page { padding: 58px 0 70px; }
+
+    /* category block */
+    .cat-block { margin-bottom: 56px; }
+    .cat-block:last-child { margin-bottom: 0; }
+
+    .cat-header { margin-bottom: 24px; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+    .cat-header-left {}
+    .cat-eyebrow { font-size: .7rem; font-weight: 700; letter-spacing: 2.8px; text-transform: uppercase; color: var(--caramel); margin-bottom: 4px; display: block; }
+    .cat-title   { font-family: 'Playfair Display', serif; font-size: clamp(1.35rem, 3vw, 1.75rem); color: var(--brown); }
+    .cat-line    { width: 48px; height: 3px; background: linear-gradient(to right, var(--gold), transparent); border-radius: 2px; margin-top: 8px; }
+    .cat-count   {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(247,200,115,.22);
+      border: 1.5px solid rgba(247,200,115,.4);
+      color: var(--brown); font-size: .8rem; font-weight: 700;
+      padding: 6px 14px; border-radius: 20px;
+    }
+    .cat-count svg { width: 14px; height: 14px; stroke: var(--caramel); flex-shrink: 0; }
+
+    /* grid */
+    .img-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    /* ═══════════════════════════════
+       GALLERY CARD
+    ═══════════════════════════════ */
+    .g-card {
+      position: relative;
+      border-radius: var(--r);
+      overflow: hidden;
+      background: linear-gradient(145deg, #f0dfc8, #e8d0b0);
+      box-shadow: var(--shadow);
+      aspect-ratio: 1 / 1;
+      cursor: pointer;
+      border: 1.5px solid var(--border);
+      transition: transform .3s cubic-bezier(.25,.8,.25,1),
+                  box-shadow .3s, border-color .3s;
+    }
+    .g-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: var(--rise);
+      border-color: rgba(247,200,115,.55);
+    }
+
+    /* placeholder shown when image missing */
+    .g-ph {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 8px;
+      pointer-events: none;
+    }
+    .g-ph svg  { opacity: .22; }
+    .g-ph span { font-size: .72rem; font-weight: 700; color: #9a6b44; letter-spacing: .5px; }
+
+    /* actual image */
+    .g-card img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform .38s cubic-bezier(.25,.8,.25,1);
+    }
+    .g-card:hover img { transform: scale(1.08); }
+
+    /* hover overlay */
+    .g-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(74,44,20,.0) 40%, rgba(74,44,20,.72) 100%);
+      opacity: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      padding: 18px;
+      transition: opacity .3s;
+    }
+    .g-card:hover .g-overlay { opacity: 1; }
+
+    .g-overlay-inner {
+      display: flex; align-items: center; gap: 8px;
+      color: #fff; font-size: .86rem; font-weight: 700;
+      background: rgba(255,255,255,.15);
+      backdrop-filter: blur(4px);
+      padding: 8px 16px; border-radius: 24px;
+      border: 1px solid rgba(255,255,255,.25);
+      transform: translateY(10px);
+      transition: transform .3s;
+    }
+    .g-card:hover .g-overlay-inner { transform: translateY(0); }
+    .g-overlay-inner svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+    /* ═══════════════════════════════
+       LIGHTBOX
+    ═══════════════════════════════ */
+    .lightbox {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(20,10,4,.92);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s;
+      backdrop-filter: blur(6px);
+    }
+    .lightbox.active { opacity: 1; pointer-events: all; }
+
+    .lb-inner {
+      position: relative;
+      max-width: 90vw; max-height: 90vh;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .lb-img-wrap {
+      position: relative;
+      max-width: 82vw; max-height: 78vh;
+      border-radius: 12px; overflow: hidden;
+      box-shadow: 0 24px 72px rgba(0,0,0,.55);
+    }
+    .lb-img-wrap img {
+      display: block;
+      max-width: 82vw; max-height: 78vh;
+      object-fit: contain;
+      border-radius: 12px;
+      transition: opacity .25s;
+    }
+
+    /* caption */
+    .lb-caption {
+      margin-top: 16px;
+      color: rgba(255,255,255,.82);
+      font-size: .9rem; font-weight: 700;
+      letter-spacing: .3px; text-align: center;
+    }
+
+    /* close */
+    .lb-close {
+      position: fixed; top: 22px; right: 26px;
+      background: rgba(255,255,255,.12);
+      border: 1.5px solid rgba(255,255,255,.22);
+      border-radius: 50%; width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 1.3rem; font-weight: 300;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+    .lb-close:hover { background: rgba(247,200,115,.25); transform: rotate(90deg); }
+
+    /* arrows */
+    .lb-arrow {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,.12);
+      border: 1.5px solid rgba(255,255,255,.22);
+      border-radius: 50%; width: 50px; height: 50px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 1.4rem;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+      z-index: 10000;
+    }
+    .lb-arrow:hover  { background: rgba(247,200,115,.3); }
+    .lb-prev { left: 22px; }
+    .lb-next { right: 22px; }
+    .lb-prev:hover { transform: translateY(-50%) translateX(-3px); }
+    .lb-next:hover { transform: translateY(-50%) translateX(3px); }
+
+    /* counter */
+    .lb-counter {
+      position: fixed; bottom: 22px; left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.18);
+      color: rgba(255,255,255,.8);
+      font-size: .8rem; font-weight: 700;
+      padding: 5px 16px; border-radius: 20px;
+      letter-spacing: .3px;
+    }
+
+    /* ═══════════════════════════════
+       CTA SECTION
+    ═══════════════════════════════ */
+    .cta-sec {
+      background: linear-gradient(135deg, var(--brown) 0%, #6b3e1e 55%, #8a5030 100%);
+      padding: 68px 5%;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .cta-sec::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23f7c873' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .cta-inner { position: relative; z-index: 1; }
+    .cta-sec h2 {
+      font-family: 'Playfair Display', serif;
+      color: #fff; font-size: clamp(1.6rem, 4vw, 2.4rem);
+      margin-bottom: 12px; line-height: 1.2;
+    }
+    .cta-sec h2 em { color: var(--gold); font-style: italic; }
+    .cta-sec p { color: #e8d8c6; font-size: clamp(.9rem, 2vw, 1.05rem); margin-bottom: 30px; line-height: 1.7; max-width: 480px; margin-left: auto; margin-right: auto; }
+    .cta-bar { width: 48px; height: 3px; background: var(--gold); margin: 0 auto 20px; border-radius: 2px; }
+    .btn-cta {
+      display: inline-flex; align-items: center; gap: 9px;
+      background: var(--gold); color: var(--brown);
+      font-family: 'Lato', sans-serif;
+      font-size: .97rem; font-weight: 900;
+      padding: 15px 34px; border-radius: 50px; border: none;
+      box-shadow: 0 4px 18px rgba(247,200,115,.38);
+      cursor: pointer; letter-spacing: .3px;
+      transition: background .22s, transform .18s, box-shadow .22s;
+    }
+    .btn-cta:hover { background: var(--caramel); transform: translateY(-3px); box-shadow: 0 8px 26px rgba(216,162,94,.42); }
+    .btn-cta svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    /* ═══════════════════════════════
+       SERVICE BANNER
+    ═══════════════════════════════ */
+    .svc-banner {
+      background: var(--gold);
+      padding: 16px 5%;
+      text-align: center;
+    }
+    .svc-banner p { font-size: .89rem; font-weight: 800; color: var(--brown); line-height: 1.65; }
+    .svc-banner p + p { margin-top: 4px; }
+
+    /* ═══════════════════════════════
+       FOOTER
+    ═══════════════════════════════ */
+    footer { background: var(--brown); text-align: center; padding: 42px 5% 28px; color: #f0e6d6; }
+    .ft-brand  { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--gold); margin-bottom: 8px; font-style: italic; }
+    .ft-tag    { font-size: .88rem; color: #d4bfa8; margin-bottom: 18px; }
+    .ft-div    { width: 48px; height: 2px; background: var(--gold); opacity: .4; margin: 0 auto 16px; }
+    .ft-copy   { font-size: .82rem; color: #c0a080; margin-bottom: 7px; }
+    .ft-credit { font-size: .81rem; color: #c0a080; }
+    .ft-credit a { color: var(--gold); font-weight: 800; letter-spacing: 1px; transition: opacity .2s; }
+    .ft-credit a:hover { opacity: .75; }
+
+    /* ═══════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════ */
+    @media (max-width: 1024px) {
+      .img-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .burger    { display: flex; }
+      .img-grid  { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .filter-bar { top: 50px; }
+      .lb-arrow  { width: 40px; height: 40px; font-size: 1.1rem; }
+      .lb-prev   { left: 10px; }
+      .lb-next   { right: 10px; }
+      .cat-header { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 480px) {
+      .img-grid { grid-template-columns: 1fr; }
+      .fbtn     { font-size: .78rem; padding: 6px 14px; }
+      .lb-img-wrap img { max-width: 94vw; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     NAVBAR
+═══════════════════════════════════════ -->
+<nav class="navbar">
+  <a href="index.html" class="nav-brand">🎂The Chef's Cakes &amp; Bakes</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="menu.html">Menu</a></li>
+    <li><a href="customcake.html">Custom Cakes</a></li>
+    <li><a href="gallery.html" class="active">Gallery</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="cart.html">🛒 Cart</a></li>
+  </ul>
+  <button class="burger" id="burger" aria-label="Toggle navigation">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<nav class="mob-nav" id="mobNav">
+  <a href="index.html">Home</a>
+  <a href="menu.html">Menu</a>
+  <a href="customcake.html">Custom Cakes</a>
+  <a href="gallery.html" class="active">Gallery</a>
+  <a href="contact.html">Contact</a>
+  <a href="cart.html">🛒 Cart</a>
+</nav>
+
+<!-- ═══════════════════════════════════════
+     HERO HEADER
+═══════════════════════════════════════ -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-pill">✦ Our Portfolio</div>
+    <h1>Our Cake <em>Gallery</em></h1>
+    <div class="hero-bar"></div>
+    <p>Explore our beautiful cake creations made for birthdays, anniversaries and special celebrations.</p>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════
+     FILTER BAR
+═══════════════════════════════════════ -->
+<div class="filter-bar">
+  <button class="fbtn active" data-filter="all">All Cakes</button>
+  <button class="fbtn" data-filter="birthday">🎂 Birthday</button>
+  <button class="fbtn" data-filter="anniversary">💍 Anniversary</button>
+  <button class="fbtn" data-filter="custom">🎨 Custom</button>
+  <button class="fbtn" data-filter="photo">📸 Photo Cakes</button>
+</div>
+
+<!-- ═══════════════════════════════════════
+     GALLERY
+═══════════════════════════════════════ -->
+<main class="gallery-page" id="galleryMain">
+  <div class="wrap">
+
+    <!-- ─── CATEGORY 1: Birthday Cakes ─── -->
+    <div class="cat-block" data-cat="birthday">
+      <div class="cat-header">
+        <div class="cat-header-left">
+          <span class="cat-eyebrow">🎂 Category One</span>
+          <h2 class="cat-title">Birthday Cakes</h2>
+          <div class="cat-line"></div>
+        </div>
+        <div class="cat-count">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+          4 creations
+        </div>
+      </div>
+      <div class="img-grid">
+
+        <div class="g-card" data-img="30.png" data-caption="Birthday Cake — 30.png">
+          <div class="g-ph">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9a6b44" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            <span>30.png</span>
+          </div>
+          <img src="30.png" alt="Birthday Cake 1" loading="lazy" onerror="this.style.display='none'"/>
+          <div class="g-overlay">
+            <div class="g-overlay-inner">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6m-3-3h6"/></svg>
+              View Image
+            </div>
+          </div>
+        </div>
+
+<div class="g-card" data-img="47.png" data-caption="Birthday Cake — 47.png">
+  <div class="g-ph">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9a6b44" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+    <span>47.png</span>
+  </div>
+  <img src="47.png" alt="Birthday Cake 47" loading="lazy" onerror="this.style.display='none'"/>
+  <div class="g-overlay"><div class="g-overlay-inner">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6m-3-3h6"/></svg>
+  View Image</div></div>
+</div>
+
+<div class="g-card" data-img="48.png" data-caption="Birthday Cake — 48.png">
+<img src="48.png" alt="Birthday Cake 48" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="49.png" data-caption="Birthday Cake — 49.png">
+<img src="49.png" alt="Birthday Cake 49" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="50.png" data-caption="Birthday Cake — 50.png">
+<img src="50.png" alt="Birthday Cake 50" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="51.png" data-caption="Birthday Cake — 51.png">
+<img src="51.png" alt="Birthday Cake 51" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="52.png" data-caption="Birthday Cake — 52.png">
+<img src="52.png" alt="Birthday Cake 52" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="53.png" data-caption="Birthday Cake — 53.png">
+<img src="53.png" alt="Birthday Cake 53" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="54.png" data-caption="Birthday Cake — 54.png">
+<img src="54.png" alt="Birthday Cake 54" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="55.png" data-caption="Birthday Cake — 55.png">
+<img src="55.png" alt="Birthday Cake 55" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="56.png" data-caption="Birthday Cake — 56.png">
+<img src="56.png" alt="Birthday Cake 56" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="57.png" data-caption="Birthday Cake — 57.png">
+<img src="57.png" alt="Birthday Cake 57" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="58.png" data-caption="Birthday Cake — 58.png">
+<img src="58.png" alt="Birthday Cake 58" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="59.png" data-caption="Birthday Cake — 59.png">
+<img src="59.png" alt="Birthday Cake 59" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="60.png" data-caption="Birthday Cake — 60.png">
+<img src="60.png" alt="Birthday Cake 60" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="61.png" data-caption="Birthday Cake — 61.png">
+<img src="61.png" alt="Birthday Cake 61" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="62.png" data-caption="Birthday Cake — 62.png">
+<img src="62.png" alt="Birthday Cake 62" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+        <div class="g-card" data-img="31.png" data-caption="Birthday Cake — 31.png">
+          <div class="g-ph">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9a6b44" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            <span>31.png</span>
+          </div>
+          <img src="31.png" alt="Birthday Cake 2" loading="lazy" onerror="this.style.display='none'"/>
+          <div class="g-overlay">
+            <div class="g-overlay-inner">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6m-3-3h6"/></svg>
+              View Image
+            </div>
+          </div>
+        </div>
+
+        <div class="g-card" data-img="32.png" data-caption="Birthday Cake — 32.png">
+          <div class="g-ph">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9a6b44" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            <span>32.png</span>
+          </div>
+          <img src="32.png" alt="Birthday Cake 3" loading="lazy" onerror="this.style.display='none'"/>
+          <div class="g-overlay">
+            <div class="g-overlay-inner">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6m-3-3h6"/></svg>
+              View Image
+            </div>
+          </div>
+        </div>
+
+        <div class="g-card" data-img="33.png" data-caption="Birthday Cake — 33.png">
+          <div class="g-ph">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9a6b44" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            <span>33.png</span>
+          </div>
+          <img src="33.png" alt="Birthday Cake 4" loading="lazy" onerror="this.style.display='none'"/>
+          <div class="g-overlay">
+            <div class="g-overlay-inner">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6m-3-3h6"/></svg>
+              View Image
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /img-grid -->
+    </div><!-- /cat-block birthday -->
+
+    <!-- ─── CATEGORY 2: Anniversary Cakes ─── -->
+    <div class="cat-block" data-cat="anniversary">
+      <div class="cat-header">
+        <div class="cat-header-left">
+          <span class="cat-eyebrow">💍 Category Two</span>
+          <h2 class="cat-title">Anniversary Cakes</h2>
+          <div class="cat-line"></div>
+        </div>
+        <div class="cat-count">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+          2 creations
+        </div>
+      </div>
+      <div class="img-grid">
+
+        <div class="g-card" data-img="34.png" data-caption="Anniversary Cake — 34.png">
+          <div class="g-ph">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9a6b44" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            <span>34.png</span>
+          </div>
+          <img src="34.png" alt="Anniversary Cake 1" loading="lazy" onerror="this.style.display='none'"/>
+          <div class="g-overlay">
+            <div class="g-overlay-inner">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6m-3-3h6"/></svg>
+              View Image
+            </div>
+          </div>
+        </div>
+
+
+
+<div class="g-card" data-img="63.png" data-caption="Anniversary Cake — 63.png">
+<img src="63.png" alt="Anniversary Cake 63" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="64.png" data-caption="Anniversary Cake — 64.png">
+<img src="64.png" alt="Anniversary Cake 64" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="65.png" data-caption="Anniversary Cake — 65.png">
+<img src="65.png" alt="Anniversary Cake 65" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="66.png" data-caption="Anniversary Cake — 66.png">
+<img src="66.png" alt="Anniversary Cake 66" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="67.png" data-caption="Anniversary Cake — 67.png">
+<img src="67.png" alt="Anniversary Cake 67" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="68.png" data-caption="Anniversary Cake — 68.png">
+<img src="68.png" alt="Anniversary Cake 68" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="69.png" data-caption="Anniversary Cake — 69.png">
+<img src="69.png" alt="Anniversary Cake 69" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="70.png" data-caption="Anniversary Cake — 70.png">
+<img src="70.png" alt="Anniversary Cake 70" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="71.png" data-caption="Anniversary Cake — 71.png">
+<img src="71.png" alt="Anniversary Cake 71" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="72.png" data-caption="Anniversary Cake — 72.png">
+<img src="72.png" alt="Anniversary Cake 72" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="73.png" data-caption="Anniversary Cake — 73.png">
+<img src="73.png" alt="Anniversary Cake 73" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="74.png" data-caption="Anniversary Cake — 74.png">
+<img src="74.png" alt="Anniversary Cake 74" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="75.png" data-caption="Anniversary Cake — 75.png">
+<img src="75.png" alt="Anniversary Cake 75" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="76.png" data-caption="Anniversary Cake — 76.png">
+<img src="76.png" alt="Anniversary Cake 76" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="77.png" data-caption="Anniversary Cake — 77.png">
+<img src="77.png" alt="Anniversary Cake 77" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="78.png" data-caption="Anniversary Cake — 78.png">
+<img src="78.png" alt="Anniversary Cake 78" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="79.png" data-caption="Anniversary Cake — 79.png">
+<img src="79.png" alt="Anniversary Cake 79" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="80.png" data-caption="Anniversary Cake — 80.png">
+<img src="80.png" alt="Anniversary Cake 80" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+        <div class="g-card" data-img="35.png" data-caption="Anniversary Cake — 35.png">
+          <div class="g-ph">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9a6b44" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            <span>35.png</span>
+          </div>
+          <img src="35.png" alt="Anniversary Cake 2" loading="lazy" onerror="this.style.display='none'"/>
+          <div class="g-overlay">
+            <div class="g-overlay-inner">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6m-3-3h6"/></svg>
+              View Image
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /img-grid -->
+    </div><!-- /cat-block anniversary -->
+
+    <!-- ─── CATEGORY 3: Custom Cakes ─── -->
+    <div class="cat-block" data-cat="custom">
+      <div class="cat-header">
+        <div class="cat-header-left">
+          <span class="cat-eyebrow">🎨 Category Three</span>
+          <h2 class="cat-title">Custom Cakes</h2>
+          <div class="cat-line"></div>
+        </div>
+        <div class="cat-count">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+          3 creations
+        </div>
+      </div>
+      <div class="img-grid">
+
+        <div class="g-card" data-img="36.png" data-caption="Custom Cake — 36.png">
+          <div class="g-ph">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9a6b44" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            <span>36.png</span>
+          </div>
+          <img src="36.png" alt="Custom Cake 1" loading="lazy" onerror="this.style.display='none'"/>
+          <div class="g-overlay">
+            <div class="g-overlay-inner">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6m-3-3h6"/></svg>
+              View Image
+            </div>
+          </div>
+        </div>
+
+
+<div class="g-card" data-img="81.png" data-caption="Custom Cake — 81.png">
+<img src="81.png" alt="Custom Cake 81" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="82.png" data-caption="Custom Cake — 82.png">
+<img src="82.png" alt="Custom Cake 82" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="83.png" data-caption="Custom Cake — 83.png">
+<img src="83.png" alt="Custom Cake 83" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="84.png" data-caption="Custom Cake — 84.png">
+<img src="84.png" alt="Custom Cake 84" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="85.png" data-caption="Custom Cake — 85.png">
+<img src="85.png" alt="Custom Cake 85" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="86.png" data-caption="Custom Cake — 86.png">
+<img src="86.png" alt="Custom Cake 86" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="87.png" data-caption="Custom Cake — 87.png">
+<img src="87.png" alt="Custom Cake 87" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="88.png" data-caption="Custom Cake — 88.png">
+<img src="88.png" alt="Custom Cake 88" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="89.png" data-caption="Custom Cake — 89.png">
+<img src="89.png" alt="Custom Cake 89" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="90.png" data-caption="Custom Cake — 90.png">
+<img src="90.png" alt="Custom Cake 90" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="91.png" data-caption="Custom Cake — 91.png">
+<img src="91.png" alt="Custom Cake 91" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="92.png" data-caption="Custom Cake — 92.png">
+<img src="92.png" alt="Custom Cake 92" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="93.png" data-caption="Custom Cake — 93.png">
+<img src="93.png" alt="Custom Cake 93" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="94.png" data-caption="Custom Cake — 94.png">
+<img src="94.png" alt="Custom Cake 94" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="95.png" data-caption="Custom Cake — 95.png">
+<img src="95.png" alt="Custom Cake 95" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="96.png" data-caption="Custom Cake — 96.png">
+<img src="96.png" alt="Custom Cake 96" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="97.png" data-caption="Custom Cake — 97.png">
+<img src="97.png" alt="Custom Cake 97" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+        <div class="g-card" data-img="37.png" data-caption="Custom Cake — 37.png">
+          <div class="g-ph">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9a6b44" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            <span>37.png</span>
+          </div>
+          <img src="37.png" alt="Custom Cake 2" loading="lazy" onerror="this.style.display='none'"/>
+          <div class="g-overlay">
+            <div class="g-overlay-inner">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6m-3-3h6"/></svg>
+              View Image
+            </div>
+          </div>
+        </div>
+
+        <div class="g-card" data-img="38.png" data-caption="Custom Cake — 38.png">
+          <div class="g-ph">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9a6b44" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            <span>38.png</span>
+          </div>
+          <img src="38.png" alt="Custom Cake 3" loading="lazy" onerror="this.style.display='none'"/>
+          <div class="g-overlay">
+            <div class="g-overlay-inner">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6m-3-3h6"/></svg>
+              View Image
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /img-grid -->
+    </div><!-- /cat-block custom -->
+
+    <!-- ─── CATEGORY 4: Photo Cakes ─── -->
+    <div class="cat-block" data-cat="photo">
+      <div class="cat-header">
+        <div class="cat-header-left">
+          <span class="cat-eyebrow">📸 Category Four</span>
+          <h2 class="cat-title">Photo Cakes</h2>
+          <div class="cat-line"></div>
+        </div>
+        <div class="cat-count">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+          2 creations
+        </div>
+      </div>
+      <div class="img-grid">
+
+        <div class="g-card" data-img="39.png" data-caption="Photo Cake — 39.png">
+          <div class="g-ph">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9a6b44" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            <span>39.png</span>
+          </div>
+          <img src="39.png" alt="Photo Cake 1" loading="lazy" onerror="this.style.display='none'"/>
+          <div class="g-overlay">
+            <div class="g-overlay-inner">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6m-3-3h6"/></svg>
+              View Image
+            </div>
+          </div>
+        </div>
+        
+        
+        <div class="g-card" data-img="98.png" data-caption="Photo Cake — 98.png">
+<img src="98.png" alt="Photo Cake 98" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="99.png" data-caption="Photo Cake — 99.png">
+<img src="99.png" alt="Photo Cake 99" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="100.png" data-caption="Photo Cake — 100.png">
+<img src="100.png" alt="Photo Cake 100" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="101.png" data-caption="Photo Cake — 101.png">
+<img src="101.png" alt="Photo Cake 101" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="102.png" data-caption="Photo Cake — 102.png">
+<img src="102.png" alt="Photo Cake 102" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="103.png" data-caption="Photo Cake — 103.png">
+<img src="103.png" alt="Photo Cake 103" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="104.png" data-caption="Photo Cake — 104.png">
+<img src="104.png" alt="Photo Cake 104" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="105.png" data-caption="Photo Cake — 105.png">
+<img src="105.png" alt="Photo Cake 105" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="106.png" data-caption="Photo Cake — 106.png">
+<img src="106.png" alt="Photo Cake 106" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="107.png" data-caption="Photo Cake — 107.png">
+<img src="107.png" alt="Photo Cake 107" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="108.png" data-caption="Photo Cake — 108.png">
+<img src="108.png" alt="Photo Cake 108" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="109.png" data-caption="Photo Cake — 109.png">
+<img src="109.png" alt="Photo Cake 109" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="110.png" data-caption="Photo Cake — 110.png">
+<img src="110.png" alt="Photo Cake 110" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="111.png" data-caption="Photo Cake — 111.png">
+<img src="111.png" alt="Photo Cake 111" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="112.png" data-caption="Photo Cake — 112.png">
+<img src="112.png" alt="Photo Cake 112" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="113.png" data-caption="Photo Cake — 113.png">
+<img src="113.png" alt="Photo Cake 113" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="114.png" data-caption="Photo Cake — 114.png">
+<img src="114.png" alt="Photo Cake 114" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+<div class="g-card" data-img="115.png" data-caption="Photo Cake — 115.png">
+<img src="115.png" alt="Photo Cake 115" loading="lazy" onerror="this.style.display='none'"/>
+</div>
+
+
+
+        <div class="g-card" data-img="40.png" data-caption="Photo Cake — 40.png">
+          <div class="g-ph">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9a6b44" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            <span>40.png</span>
+          </div>
+          <img src="40.png" alt="Photo Cake 2" loading="lazy" onerror="this.style.display='none'"/>
+          <div class="g-overlay">
+            <div class="g-overlay-inner">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6m-3-3h6"/></svg>
+              View Image
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /img-grid -->
+    </div><!-- /cat-block photo -->
+
+  </div><!-- /wrap -->
+</main><!-- /gallery-page -->
+
+<!-- ═══════════════════════════════════════
+     LIGHTBOX
+═══════════════════════════════════════ -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <button class="lb-close" id="lbClose" aria-label="Close">✕</button>
+  <button class="lb-arrow lb-prev" id="lbPrev" aria-label="Previous image">&#8249;</button>
+  <button class="lb-arrow lb-next" id="lbNext" aria-label="Next image">&#8250;</button>
+  <div class="lb-inner">
+    <div class="lb-img-wrap">
+      <img src="" alt="" id="lbImg"/>
+    </div>
+    <div class="lb-caption" id="lbCaption"></div>
+  </div>
+  <div class="lb-counter" id="lbCounter"></div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     CTA SECTION
+═══════════════════════════════════════ -->
+<section class="cta-sec">
+  <div class="cta-inner">
+    <h2>Want a Cake <em>Like This?</em></h2>
+    <div class="cta-bar"></div>
+    <p>Every cake in our gallery was made with love, just for someone special. Let us create something magical for you.</p>
+    <a href="customcake.html" class="btn-cta">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      Order Custom Cake
+    </a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     SERVICE BANNER
+═══════════════════════════════════════ -->
+<div class="svc-banner">
+  <p>🚀 Serving Fresh Cakes in Ejipura, Bangalore</p>
+  <p>🛵 Home Delivery Available – ₹100 charge</p>
+</div>
+
+<!-- ═══════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════ -->
+<footer>
+  <div class="ft-brand">The Chef's Cakes &amp; Bakes</div>
+  <div class="ft-tag">Serving Fresh Cakes in Ejipura, Bangalore</div>
+  <div class="ft-div"></div>
+  <p class="ft-copy">© 2026 The Chef's Cakes &amp; Bakes. All Rights Reserved.</p>
+  <p class="ft-credit">Designed by <a href="https://www.instagram.com/echox_com/" target="_blank" rel="noopener">ECHOX</a></p>
+</footer>
+
+<!-- ═══════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════ -->
+<script>
+  /* ── Mobile Nav ── */
+  var burger = document.getElementById('burger');
+  var mobNav = document.getElementById('mobNav');
+  burger.addEventListener('click', function () {
+    burger.classList.toggle('open');
+    mobNav.classList.toggle('open');
+  });
+
+  /* ════════════════════════════════
+     FILTER SYSTEM
+  ════════════════════════════════ */
+  var filterBtns = document.querySelectorAll('.fbtn');
+  var catBlocks  = document.querySelectorAll('.cat-block');
+
+  filterBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      /* update active state */
+      filterBtns.forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+
+      var filter = btn.getAttribute('data-filter');
+
+      catBlocks.forEach(function (block) {
+        if (filter === 'all' || block.getAttribute('data-cat') === filter) {
+          block.style.display = '';
+        } else {
+          block.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  /* ════════════════════════════════
+     LIGHTBOX SYSTEM
+  ════════════════════════════════ */
+  var lightbox  = document.getElementById('lightbox');
+  var lbImg     = document.getElementById('lbImg');
+  var lbCaption = document.getElementById('lbCaption');
+  var lbCounter = document.getElementById('lbCounter');
+  var lbClose   = document.getElementById('lbClose');
+  var lbPrev    = document.getElementById('lbPrev');
+  var lbNext    = document.getElementById('lbNext');
+
+  /* Collect all visible gallery cards into a flat array at open time */
+  var lbImages  = [];
+  var lbCurrent = 0;
+
+  function buildImageList() {
+    lbImages = [];
+    document.querySelectorAll('.cat-block').forEach(function (block) {
+      if (block.style.display === 'none') return;
+      block.querySelectorAll('.g-card').forEach(function (card) {
+        lbImages.push({
+          src:     card.getAttribute('data-img'),
+          caption: card.getAttribute('data-caption')
+        });
+      });
+    });
+  }
+
+  function openLightbox(index) {
+    buildImageList();
+    lbCurrent = index;
+    showLbImage();
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+    lbImg.src = '';
+  }
+
+  function showLbImage() {
+    if (lbImages.length === 0) return;
+    lbCurrent = (lbCurrent + lbImages.length) % lbImages.length;
+    var item = lbImages[lbCurrent];
+    lbImg.style.opacity = '0';
+    lbImg.src = item.src;
+    lbImg.alt = item.caption;
+    lbCaption.textContent = item.caption;
+    lbCounter.textContent = (lbCurrent + 1) + ' / ' + lbImages.length;
+    lbImg.onload  = function () { lbImg.style.opacity = '1'; };
+    lbImg.onerror = function () { lbImg.style.opacity = '1'; };
+  }
+
+  /* Attach click handlers to all cards */
+  function attachCardClicks() {
+    document.querySelectorAll('.g-card').forEach(function (card, globalIdx) {
+      card.addEventListener('click', function () {
+        /* find position within currently visible images */
+        buildImageList();
+        var src = card.getAttribute('data-img');
+        var idx = lbImages.findIndex(function (item) { return item.src === src; });
+        if (idx === -1) idx = 0;
+        openLightbox(idx);
+      });
+    });
+  }
+  attachCardClicks();
+
+  /* Controls */
+  lbClose.addEventListener('click', closeLightbox);
+  lbPrev.addEventListener('click',  function () { lbCurrent--; showLbImage(); });
+  lbNext.addEventListener('click',  function () { lbCurrent++; showLbImage(); });
+
+  /* Click outside image closes lightbox */
+  lightbox.addEventListener('click', function (e) {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  /* Keyboard navigation */
+  document.addEventListener('keydown', function (e) {
+    if (!lightbox.classList.contains('active')) return;
+    if (e.key === 'Escape'     || e.key === 'Esc')        closeLightbox();
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')    { lbCurrent--; showLbImage(); }
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown')  { lbCurrent++; showLbImage(); }
+  });
+
+  /* Touch / swipe support */
+  var touchStartX = null;
+  lightbox.addEventListener('touchstart', function (e) {
+    touchStartX = e.changedTouches[0].clientX;
+  }, { passive: true });
+  lightbox.addEventListener('touchend', function (e) {
+    if (touchStartX === null) return;
+    var diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) { lbCurrent++; } else { lbCurrent--; }
+      showLbImage();
+    }
+    touchStartX = null;
+  });
+
+  /* Array findIndex polyfill for older browsers */
+  if (!Array.prototype.findIndex) {
+    Array.prototype.findIndex = function (fn) {
+      for (var i = 0; i < this.length; i++) {
+        if (fn(this[i], i, this)) return i;
+      }
+      return -1;
+    };
+  }
+</script>
+</body>
+</html>
